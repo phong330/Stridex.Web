@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SanPham } from '../../models/sanpham';
 import { GiohangService } from '../../services/giohang.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-the-san-pham',
@@ -33,9 +35,20 @@ import { GiohangService } from '../../services/giohang.service';
 export class TheSanPhamComponent {
   @Input({ required: true }) sanpham!: SanPham;
 
-  constructor(private giohang: GiohangService) { }
+  constructor(
+    private giohang: GiohangService,
+    private auth: AuthService,
+    private router: Router
+  ) { }
 
   themVaoGio() {
+    if (!this.auth.daDangNhap()) {
+      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
+      this.router.navigate(['/dang-nhap']);
+      return;
+    }
+
     this.giohang.them(this.sanpham);
+    alert('Đã thêm sản phẩm vào giỏ hàng!');
   }
 }

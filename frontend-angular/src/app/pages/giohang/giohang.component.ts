@@ -2,53 +2,29 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { GiohangService } from '../../services/giohang.service';
+import { AuthService } from '../../services/auth.service';
+import { DonhangService } from '../../services/donhang.service';
 import { SanPham } from '../../models/sanpham';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-giohang',
+  selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, RouterLink],
-  template: `
-  <section id="trang-gio-hang" class="khung trang-gio-hang">
-    <h1 class="tieu-de-trang">Giỏ hàng</h1>
-
-    <div *ngIf="dsGioHang.length > 0; else gioRong" class="bo-cuc-gio-hang">
-      <div class="danh-sach-gio-hang">
-        <div *ngFor="let sp of dsGioHang" class="dong-gio-hang">
-          <img [src]="sp.hinh" class="anh-gio-hang">
-
-          <div class="noi-dung-gio-hang">
-            <div>
-              <h3 class="ten-gio-hang">{{sp.ten}}</h3>
-              <p class="gia-gio-hang">{{sp.gia | number}} d</p>
-            </div>
-
-            <button (click)="xoa(sp.id)" class="nut-vien nut-xoa">Xóa</button>
-          </div>
-        </div>
-      </div>
-
-      <aside class="tom-tat-gio-hang">
-        <h2>Tạm tính</h2>
-        <p class="so-luong-gio-hang">So san pham: {{dsGioHang.length}}</p>
-        <p class="tong-tien-gio-hang">{{tongTien | number}} d</p>
-        <button class="nut-do nut-thanh-toan">Thanh toán</button>
-      </aside>
-    </div>
-
-    <ng-template #gioRong>
-      <div class="gio-hang-rong">
-        <p>Gio hang dang trong.</p>
-        <a routerLink="/san-pham" class="nut-do nut-mua-san-pham">Mua sản phẩm</a>
-      </div>
-    </ng-template>
-  </section>`
+  imports: [CommonModule, FormsModule],
+  templateUrl: './giohang.component.html',
+  styleUrls: ['./giohang.component.css']
 })
+
+
 export class GiohangComponent {
   dsGioHang: SanPham[] = [];
   tongTien = 0;
 
-  constructor(private giohang: GiohangService) {
+  constructor(
+    private giohang: GiohangService,
+    private auth: AuthService,
+    private donhangService: DonhangService
+  ) {
     this.giohang.danhSach$.subscribe(ds => {
       this.dsGioHang = ds;
       this.tongTien = this.giohang.tongTien();
@@ -57,5 +33,40 @@ export class GiohangComponent {
 
   xoa(id: number) {
     this.giohang.xoa(id);
+  }
+
+  thanhToan() {
+    const nguoiDung = this.auth.layNguoiDungDangNhap();
+
+    if (!nguoiDung) {
+      alert('Vui lòng đăng nhập để thanh toán!');
+      return;
+    }
+
+    if (this.dsGioHang.length === 0) {
+      alert('Giỏ hàng đang trống!');
+      return;
+    }
+
+    const chiTiet = this.dsGioHang.map(sp => ({
+      sanPhamId: sp.id,
+      soLuong: 1,
+      donGia: sp.gia
+    }));
+
+    const donHang = {
+      nguoiDungId: nguoiDung.id,
+      chiTiet: chiTiet
+    };
+
+    this.donhangService.taoDonHang(donHang).subscribe({
+      next: (res) => {
+        alert('Đặt hàng thành công! Mã đơn hàng: ' + res.maDonHang);
+        this.giohang.xoaTatCa();
+      },
+      error: () => {
+        alert('Đặt hàng thất bại!');
+      }
+    });
   }
 }

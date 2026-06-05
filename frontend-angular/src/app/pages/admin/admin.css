@@ -1,0 +1,1004 @@
+#admin-dashboard {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    background: #f4f5f7;
+    color: #091e42;
+}
+
+#admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    background: #091e42;
+    color: white;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-logo {
+    margin-bottom: 32px;
+}
+
+.admin-logo span {
+    display: block;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.admin-logo small {
+    color: #a5b4fc;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-menu button {
+    border: none;
+    background: transparent;
+    color: #cbd5e1;
+    padding: 14px 16px;
+    border-radius: 16px;
+    text-align: left;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.admin-menu button:hover,
+.admin-menu .menu-dang-chon {
+    background: #0052cc;
+    color: white;
+}
+
+.nut-dang-xuat-admin {
+    margin-top: auto;
+    border: none;
+    background: #ff3366;
+    color: white;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+#admin-main {
+    min-width: 0;
+    padding: 24px;
+}
+
+#admin-header {
+    background: white;
+    border-radius: 24px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(9, 30, 66, .08);
+    margin-bottom: 24px;
+}
+
+#admin-header h1 {
+    font-size: 30px;
+    font-weight: 900;
+}
+
+#admin-header p {
+    color: #6b778c;
+}
+
+.admin-header-phai {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-header-phai input {
+    width: 280px;
+    border: 1px solid #dfe1e6;
+    border-radius: 999px;
+    padding: 12px 18px;
+    outline: none;
+}
+
+.nut-thong-bao,
+.nut-darkmode {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #f4f5f7;
+    cursor: pointer;
+}
+
+.admin-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #0052cc;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.admin-loading,
+.empty-state {
+    background: white;
+    border-radius: 24px;
+    padding: 36px;
+    text-align: center;
+    color: #6b778c;
+    box-shadow: 0 10px 30px rgba(9, 30, 66, .08);
+}
+
+.admin-noi-dung {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.luoi-thong-ke {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.the-thong-ke {
+    background: white;
+    padding: 24px;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(9, 30, 66, .08);
+    transition: .25s;
+}
+
+.the-thong-ke:hover {
+    transform: translateY(-4px);
+}
+
+.the-thong-ke p {
+    color: #6b778c;
+}
+
+.the-thong-ke h2 {
+    margin-top: 10px;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.the-thong-ke span {
+    display: block;
+    margin-top: 10px;
+    color: #16a34a;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-hai-cot {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.hop-admin {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(9, 30, 66, .08);
+}
+
+.tieu-de-hop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tieu-de-hop h2 {
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.tieu-de-hop p {
+    color: #6b778c;
+}
+
+.bieu-do-cot {
+    height: 260px;
+    display: flex;
+    align-items: end;
+    gap: 18px;
+    padding-top: 20px;
+}
+
+.cot-thang {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+}
+
+.cot-gia-tri {
+    width: 100%;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(180deg, #ff3366, #0052cc);
+}
+
+.cot-thang span {
+    color: #6b778c;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.dong-mini-san-pham {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.dong-mini-san-pham img {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+.dong-mini-san-pham h4 {
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.dong-mini-san-pham p {
+    color: #ff3366;
+    font-weight: 800;
+}
+
+.bang-admin-moi {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bang-admin-moi th,
+.bang-admin-moi td {
+    padding: 14px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.bang-admin-moi th {
+    color: #6b778c;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.trang-thai-don-hang {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.phan-trang-admin {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.phan-trang-admin button {
+    border: none;
+    border-radius: 12px;
+    background: #0052cc;
+    color: white;
+    padding: 10px 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.form-admin-moi {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    box-shadow: 0 10px 30px rgba(9, 30, 66, .08);
+}
+
+.form-admin-moi h2 {
+    grid-column: span 2;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.form-admin-moi input,
+.form-admin-moi select,
+.form-admin-moi textarea {
+    width: 100%;
+    border: 1px solid #dfe1e6;
+    border-radius: 16px;
+    padding: 14px 16px;
+    outline: none;
+}
+
+.form-admin-moi textarea {
+    grid-column: span 2;
+    min-height: 110px;
+}
+
+.chon-noi-bat-admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+}
+
+.chon-noi-bat-admin input {
+    width: auto;
+}
+
+.nut-form-admin-moi {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.nut-chinh-admin,
+.nut-phu-admin,
+.nut-sua-admin,
+.nut-xoa-admin-moi {
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.nut-chinh-admin {
+    background: #ff3366;
+}
+
+.nut-phu-admin {
+    background: #0052cc;
+}
+
+.nut-sua-admin {
+    background: #0052cc;
+    margin-right: 6px;
+}
+
+.nut-xoa-admin-moi {
+    background: #ff3366;
+}
+
+.anh-bang-admin {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+/* DARK MODE ADMIN */
+#admin-dashboard.che-do-toi {
+    background: #0f172a;
+    color: white;
+}
+
+#admin-dashboard.che-do-toi #admin-header,
+#admin-dashboard.che-do-toi .the-thong-ke,
+#admin-dashboard.che-do-toi .hop-admin,
+#admin-dashboard.che-do-toi .form-admin-moi,
+#admin-dashboard.che-do-toi .admin-loading,
+#admin-dashboard.che-do-toi .empty-state {
+    background: #111827;
+    color: white;
+}
+
+#admin-dashboard.che-do-toi .bang-admin-moi th,
+#admin-dashboard.che-do-toi .bang-admin-moi td {
+    border-color: #1f2937;
+    color: white;
+}
+
+#admin-dashboard.che-do-toi input,
+#admin-dashboard.che-do-toi select,
+#admin-dashboard.che-do-toi textarea {
+    background: #0f172a;
+    color: white;
+    border-color: #334155;
+}
+
+/* RESPONSIVE ADMIN */
+@media(max-width:1024px) {
+    #admin-dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    #admin-sidebar {
+        position: relative;
+        height: auto;
+    }
+
+    .admin-menu {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .luoi-thong-ke,
+    .admin-hai-cot {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:768px) {
+    #admin-main {
+        padding: 14px;
+    }
+
+    #admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .admin-header-phai {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .admin-header-phai input {
+        width: 100%;
+    }
+
+    .admin-menu {
+        grid-template-columns: 1fr;
+    }
+
+    .luoi-thong-ke,
+    .admin-hai-cot,
+    .form-admin-moi {
+        grid-template-columns: 1fr;
+    }
+
+    .form-admin-moi h2,
+    .form-admin-moi textarea {
+        grid-column: span 1;
+    }
+
+    .hop-admin {
+        overflow-x: auto;
+    }
+}
+
+.admin-user-box {
+    position: relative;
+}
+
+.admin-avatar {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: #0052cc;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.admin-avatar:hover {
+    background: #ff3366;
+}
+
+.admin-dropdown {
+    position: absolute;
+    top: 56px;
+    right: 0;
+    width: 260px;
+    background: white;
+    color: #091e42;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 16px 40px rgba(9, 30, 66, .18);
+    z-index: 100;
+}
+
+.admin-dropdown-header {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.admin-dropdown-header strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 900;
+    color: #091e42;
+}
+
+.admin-dropdown-header p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #6b778c;
+    word-break: break-all;
+}
+
+.admin-dropdown-logout {
+    width: 100%;
+    margin-top: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #ff3366;
+    color: white;
+    padding: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.admin-dropdown-logout:hover {
+    background: #e62e5c;
+}
+
+/* DARK MODE */
+#admin-dashboard.che-do-toi .admin-dropdown {
+    background: #111827;
+    color: white;
+}
+
+#admin-dashboard.che-do-toi .admin-dropdown-header {
+    border-color: #1f2937;
+}
+
+#admin-dashboard.che-do-toi .admin-dropdown-header strong {
+    color: white;
+}
+
+#admin-dashboard.che-do-toi .admin-dropdown-header p {
+    color: #cbd5e1;
+}
+
+/* ========================= */
+/* DANH SACH TAT CA SAN PHAM ADMIN */
+/* ========================= */
+
+.bo-loc-loai-admin {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.bo-loc-loai-admin button {
+    border: 1px solid #dfe1e6;
+    background: white;
+    color: #091e42;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.bo-loc-loai-admin button:hover,
+.bo-loc-loai-admin .loai-dang-chon {
+    background: #0052cc;
+    color: white;
+    border-color: #0052cc;
+}
+
+/* Lưới 4 sản phẩm ngang */
+.luoi-san-pham-admin {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.the-san-pham-admin {
+    border: 1px solid #edf2f7;
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 8px 24px rgba(9, 30, 66, .08);
+    transition: .25s;
+}
+
+.the-san-pham-admin:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 34px rgba(9, 30, 66, .14);
+}
+
+.anh-san-pham-admin-wrap {
+    width: 100%;
+    height: 190px;
+    background: #f4f5f7;
+    overflow: hidden;
+}
+
+.anh-san-pham-admin-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.noi-dung-san-pham-admin {
+    padding: 14px;
+}
+
+.dong-loai-admin {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.dong-loai-admin span {
+    display: inline-block;
+    background: #ff3366;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.dong-loai-admin small {
+    color: #ff3366;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.noi-dung-san-pham-admin h3 {
+    min-height: 44px;
+    color: #091e42;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.4;
+}
+
+.mo-ta-admin {
+    margin-top: 8px;
+    min-height: 42px;
+    color: #6b778c;
+    font-size: 13px;
+    line-height: 1.5;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.noi-dung-san-pham-admin strong {
+    display: block;
+    margin-top: 12px;
+    color: #ff3366;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.nut-thao-tac-san-pham-admin {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.nut-sua-card,
+.nut-xoa-card {
+    border: none;
+    border-radius: 12px;
+    padding: 10px;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.nut-sua-card {
+    background: #0052cc;
+}
+
+.nut-sua-card:hover {
+    background: #003f99;
+}
+
+.nut-xoa-card {
+    background: #ff3366;
+}
+
+.nut-xoa-card:hover {
+    background: #e62e5c;
+}
+
+/* PHAN TRANG SAN PHAM */
+.phan-trang-san-pham-admin {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.phan-trang-san-pham-admin button {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #dfe1e6;
+    border-radius: 12px;
+    background: white;
+    color: #091e42;
+    font-weight: 900;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.phan-trang-san-pham-admin button:hover,
+.phan-trang-san-pham-admin .trang-dang-chon {
+    background: #ff3366;
+    color: white;
+    border-color: #ff3366;
+}
+
+/* ========================= */
+/* FORM SUA SAN PHAM TU DANH SACH */
+/* ========================= */
+
+.form-sua-san-pham-danh-sach {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(9, 30, 66, .08);
+}
+
+.tieu-de-form-sua {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.tieu-de-form-sua p {
+    color: #0052cc;
+    font-weight: 900;
+    font-size: 13px;
+}
+
+.tieu-de-form-sua h2 {
+    color: #091e42;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.nut-dong-form-sua {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: #f4f5f7;
+    color: #091e42;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.nut-dong-form-sua:hover {
+    background: #ff3366;
+    color: white;
+}
+
+.khung-form-sua-san-pham {
+    display: grid;
+    grid-template-columns: 1fr 1fr 260px;
+    gap: 20px;
+}
+
+.cot-form-sua {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cot-form-sua label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cot-form-sua label span {
+    color: #6b778c;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.cot-form-sua input,
+.cot-form-sua select,
+.cot-form-sua textarea {
+    width: 100%;
+    border: 1px solid #dfe1e6;
+    border-radius: 14px;
+    padding: 13px 15px;
+    color: #091e42;
+    outline: none;
+}
+
+.cot-form-sua textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.cot-form-sua input:focus,
+.cot-form-sua select:focus,
+.cot-form-sua textarea:focus {
+    border-color: #0052cc;
+}
+
+.chon-noi-bat-sua {
+    flex-direction: row !important;
+    align-items: center;
+}
+
+.chon-noi-bat-sua input {
+    width: auto;
+}
+
+.xem-truoc-san-pham-sua {
+    border: 1px solid #edf2f7;
+    border-radius: 18px;
+    padding: 14px;
+    background: #f8fafc;
+}
+
+.xem-truoc-san-pham-sua p {
+    color: #6b778c;
+    font-size: 14px;
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.xem-truoc-san-pham-sua img,
+.khong-co-anh-sua {
+    width: 100%;
+    height: 230px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.khong-co-anh-sua {
+    background: #e5e7eb;
+    color: #6b778c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.nut-form-sua-san-pham {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.nut-huy-sua,
+.nut-luu-sua {
+    border: none;
+    border-radius: 14px;
+    padding: 12px 18px;
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.nut-huy-sua {
+    background: #6b778c;
+}
+
+.nut-luu-sua {
+    background: #ff3366;
+}
+
+.nut-huy-sua:hover {
+    background: #4b5563;
+}
+
+.nut-luu-sua:hover {
+    background: #e62e5c;
+}
+
+/* ========================= */
+/* DARK MODE CHO PRODUCT LIST */
+/* ========================= */
+
+#admin-dashboard.che-do-toi .bo-loc-loai-admin button,
+#admin-dashboard.che-do-toi .the-san-pham-admin,
+#admin-dashboard.che-do-toi .phan-trang-san-pham-admin button,
+#admin-dashboard.che-do-toi .form-sua-san-pham-danh-sach {
+    background: #111827;
+    color: white;
+    border-color: #334155;
+}
+
+#admin-dashboard.che-do-toi .noi-dung-san-pham-admin h3,
+#admin-dashboard.che-do-toi .tieu-de-form-sua h2 {
+    color: white;
+}
+
+#admin-dashboard.che-do-toi .mo-ta-admin,
+#admin-dashboard.che-do-toi .cot-form-sua label span,
+#admin-dashboard.che-do-toi .xem-truoc-san-pham-sua p {
+    color: #cbd5e1;
+}
+
+#admin-dashboard.che-do-toi .cot-form-sua input,
+#admin-dashboard.che-do-toi .cot-form-sua select,
+#admin-dashboard.che-do-toi .cot-form-sua textarea,
+#admin-dashboard.che-do-toi .xem-truoc-san-pham-sua {
+    background: #0f172a;
+    color: white;
+    border-color: #334155;
+}
+
+#admin-dashboard.che-do-toi .phan-trang-san-pham-admin .trang-dang-chon,
+#admin-dashboard.che-do-toi .bo-loc-loai-admin .loai-dang-chon {
+    background: #ff3366;
+    border-color: #ff3366;
+    color: white;
+}
+
+/* ========================= */
+/* RESPONSIVE PRODUCT LIST */
+/* ========================= */
+
+@media(max-width: 1200px) {
+    .luoi-san-pham-admin {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .khung-form-sua-san-pham {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .xem-truoc-san-pham-sua {
+        grid-column: span 2;
+    }
+}
+
+@media(max-width: 900px) {
+    .luoi-san-pham-admin {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .khung-form-sua-san-pham {
+        grid-template-columns: 1fr;
+    }
+
+    .xem-truoc-san-pham-sua {
+        grid-column: span 1;
+    }
+}
+
+@media(max-width: 560px) {
+    .luoi-san-pham-admin {
+        grid-template-columns: 1fr;
+    }
+
+    .nut-form-sua-san-pham {
+        flex-direction: column;
+    }
+}

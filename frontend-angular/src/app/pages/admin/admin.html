@@ -1,1 +1,502 @@
-<p>admin works!</p>
+<section id="admin-dashboard" [class.che-do-toi]="cheDoToi">
+
+  <aside id="admin-sidebar">
+    <div class="admin-logo">
+      <span>STRIDEX</span>
+      <small>Admin Panel</small>
+    </div>
+
+    <nav class="admin-menu">
+      <button [class.menu-dang-chon]="tabDangChon==='dashboard'" (click)="chonTab('dashboard')">📊 Dashboard</button>
+      <button [class.menu-dang-chon]="tabDangChon==='users'" (click)="chonTab('users')">👥 Users</button>
+      <button [class.menu-dang-chon]="tabDangChon==='orders'" (click)="chonTab('orders')">🧾 Orders</button>
+      <button [class.menu-dang-chon]="tabDangChon==='products'" (click)="chonTab('products')">➕ Thêm sản phẩm</button>
+      <button [class.menu-dang-chon]="tabDangChon==='productList'" (click)="chonTab('productList')">📦 Tất cả sản
+        phẩm</button>
+      <button [class.menu-dang-chon]="tabDangChon==='reports'" (click)="chonTab('reports')">📈 Reports</button>
+      <button [class.menu-dang-chon]="tabDangChon==='settings'" (click)="chonTab('settings')">⚙️ Settings</button>
+    </nav>
+  </aside>
+
+  <main id="admin-main">
+
+    <header id="admin-header">
+      <div>
+        <h1>{{tieuDeTrang}}</h1>
+        <p>Quản lý hệ thống bán đồ thể thao STRIDEX</p>
+      </div>
+
+      <div class="admin-header-phai">
+        <input [(ngModel)]="tuKhoaAdmin" placeholder="Tìm kiếm trong admin...">
+
+        <button class="nut-thong-bao">🔔</button>
+
+        <button class="nut-darkmode" (click)="doiCheDo()">
+          {{cheDoToi ? '☀️' : '🌙'}}
+        </button>
+
+        <div class="admin-user-box">
+          <button class="admin-avatar" type="button" (click)="batTatMenuAdmin()">
+            <span>A</span>
+          </button>
+
+          <div class="admin-dropdown" *ngIf="hienMenuAdmin">
+            <div class="admin-dropdown-header">
+              <strong>Admin</strong>
+              <p>{{emailAdmin}}</p>
+            </div>
+
+            <button type="button" (click)="dangXuat()" class="admin-dropdown-logout">
+              Đăng xuất
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div *ngIf="dangTai" class="admin-loading">
+      Đang tải dữ liệu...
+    </div>
+
+    <ng-container *ngIf="!dangTai">
+
+      <!-- DASHBOARD -->
+      <section *ngIf="tabDangChon==='dashboard'" class="admin-noi-dung">
+
+        <div class="luoi-thong-ke">
+          <article class="the-thong-ke">
+            <p>Tổng doanh thu</p>
+            <h2>{{tongDoanhThu | number}} đ</h2>
+            <span>Dữ liệu từ đơn hàng SQL</span>
+          </article>
+
+          <article class="the-thong-ke">
+            <p>Tổng đơn hàng</p>
+            <h2>{{tongDonHang}}</h2>
+            <span>Đơn hàng người dùng đã đặt</span>
+          </article>
+
+          <article class="the-thong-ke">
+            <p>Số người dùng</p>
+            <h2>{{tongNguoiDung}}</h2>
+            <span>Tài khoản trong hệ thống</span>
+          </article>
+
+          <article class="the-thong-ke">
+            <p>Tỷ lệ tăng trưởng</p>
+            <h2>{{tiLeTangTruong}}%</h2>
+            <span>Thống kê tổng quan</span>
+          </article>
+        </div>
+
+        <div class="admin-hai-cot">
+          <section class="hop-admin">
+            <div class="tieu-de-hop">
+              <h2>Doanh thu theo tháng</h2>
+              <p>Năm 2026</p>
+            </div>
+
+            <div *ngIf="doanhThuThang.length === 0" class="empty-state">
+              Chưa có dữ liệu doanh thu.
+            </div>
+
+            <div *ngIf="doanhThuThang.length > 0" class="bieu-do-cot">
+              <div *ngFor="let item of doanhThuThang" class="cot-thang">
+                <div class="cot-gia-tri" [style.height.%]="item.phanTram" [title]="(item.doanhThu | number) + ' đ'">
+                </div>
+                <span>{{item.thang}}</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="hop-admin">
+            <div class="tieu-de-hop">
+              <h2>Sản phẩm nổi bật</h2>
+              <p>{{dsNoiBat.length}} sản phẩm</p>
+            </div>
+
+            <div *ngIf="dsNoiBat.length===0" class="empty-state">
+              Chưa có sản phẩm nổi bật.
+            </div>
+
+            <div *ngFor="let sp of dsNoiBat.slice(0,5)" class="dong-mini-san-pham">
+              <img [src]="sp.hinh">
+              <div>
+                <h4>{{sp.ten}}</h4>
+                <p>{{sp.gia | number}} đ</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <h2>Đơn hàng mới nhất</h2>
+            <p>Hiển thị {{donHangHienThi.length}} đơn hàng</p>
+          </div>
+
+          <div *ngIf="donHangMoi.length === 0" class="empty-state">
+            Chưa có đơn hàng nào.
+          </div>
+
+          <table *ngIf="donHangMoi.length > 0" class="bang-admin-moi">
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let dh of donHangHienThi">
+                <td>{{dh.ma}}</td>
+                <td>{{dh.khachHang}}</td>
+                <td>{{dh.ngay}}</td>
+                <td>{{dh.tongTien | number}} đ</td>
+                <td>
+                  <span class="trang-thai-don-hang">{{dh.trangThai}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="phan-trang-admin" *ngIf="donHangMoi.length > soDonMoiTrang">
+            <button (click)="doiTrangDonHang(-1)">Trước</button>
+            <span>Trang {{trangDonHang}}</span>
+            <button (click)="doiTrangDonHang(1)">Sau</button>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- PRODUCTS -->
+      <section *ngIf="tabDangChon==='products'" class="admin-noi-dung">
+
+        <form class="form-admin-moi" (ngSubmit)="luuSanPham()">
+          <h2>{{dangSua ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm mới'}}</h2>
+
+          <input [(ngModel)]="sanPhamDangSua.ten" name="ten" placeholder="Tên sản phẩm" required>
+
+          <select [(ngModel)]="sanPhamDangSua.loai" name="loai">
+            <option value="Bong ro">Bóng rổ</option>
+            <option value="Bong chuyen">Bóng chuyền</option>
+            <option value="Bong da futsal">Bóng đá & Futsal</option>
+            <option value="Tap gym workout">Tập Gym & Workout</option>
+            <option value="Chay bo di bo">Chạy bộ & Đi bộ</option>
+            <option value="Cau long">Cầu lông</option>
+            <option value="Pickleball">Pickleball</option>
+          </select>
+
+          <input [(ngModel)]="sanPhamDangSua.gia" name="gia" type="number" placeholder="Giá">
+
+          <input [(ngModel)]="sanPhamDangSua.hinh" name="hinh" placeholder="Link hình ảnh">
+
+          <textarea [(ngModel)]="sanPhamDangSua.mota" name="mota" placeholder="Mô tả sản phẩm"></textarea>
+
+          <label class="chon-noi-bat-admin">
+            <input [(ngModel)]="sanPhamDangSua.noiBat" name="noiBat" type="checkbox">
+            Sản phẩm nổi bật
+          </label>
+
+          <div class="nut-form-admin-moi">
+            <button class="nut-chinh-admin" type="submit">
+              {{dangSua ? 'Lưu thay đổi' : 'Thêm sản phẩm'}}
+            </button>
+
+            <button class="nut-phu-admin" type="button" (click)="lamMoiForm()">
+              Làm mới
+            </button>
+          </div>
+        </form>
+
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <h2>Danh sách sản phẩm</h2>
+            <p>{{dsSanPham.length}} sản phẩm</p>
+          </div>
+
+          <div *ngIf="dsSanPham.length===0" class="empty-state">
+            Chưa có sản phẩm nào.
+          </div>
+
+          <table *ngIf="dsSanPham.length>0" class="bang-admin-moi">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Hình</th>
+                <th>Tên</th>
+                <th>Loại</th>
+                <th>Giá</th>
+                <th>Nổi bật</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let sp of danhSachSanPhamLoc">
+                <td>{{sp.id}}</td>
+                <td><img class="anh-bang-admin" [src]="sp.hinh"></td>
+                <td>{{sp.ten}}</td>
+                <td>{{sp.loai}}</td>
+                <td>{{sp.gia | number}} đ</td>
+                <td>{{sp.noiBat ? 'Có' : 'Không'}}</td>
+                <td>
+                  <button class="nut-sua-admin" (click)="chonSua(sp)">Sửa</button>
+                  <button class="nut-xoa-admin-moi" (click)="xoaSanPham(sp.id)">Xóa</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+      </section>
+
+      <!-- USERS -->
+      <section *ngIf="tabDangChon==='users'" class="admin-noi-dung">
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <h2>Quản lý người dùng</h2>
+            <p>UI demo cho chức năng Users</p>
+          </div>
+
+          <div class="empty-state">
+            Có thể mở rộng để xem danh sách tài khoản, khóa tài khoản và phân quyền Admin/Khách hàng.
+          </div>
+        </section>
+      </section>
+      <!-- PRODUCT LIST -->
+      <section *ngIf="tabDangChon==='productList'" class="admin-noi-dung">
+
+        <!-- FORM SỬA SẢN PHẨM TRỰC TIẾP TỪ DANH SÁCH -->
+        <form *ngIf="dangMoFormSuaDanhSach" id="form-sua-san-pham-danh-sach" class="form-sua-san-pham-danh-sach"
+          (ngSubmit)="capNhatSanPhamTuDanhSach()">
+
+          <div class="tieu-de-form-sua">
+            <div>
+              <p>EDIT PRODUCT</p>
+              <h2>Chỉnh sửa thông tin sản phẩm</h2>
+            </div>
+
+            <button type="button" class="nut-dong-form-sua" (click)="dongFormSuaTuDanhSach()">
+              ✕
+            </button>
+          </div>
+
+          <div class="khung-form-sua-san-pham">
+
+            <div class="cot-form-sua">
+              <label>
+                <span>Tên sản phẩm</span>
+                <input [(ngModel)]="sanPhamDangSuaTuDanhSach.ten" name="tenSuaDanhSach" placeholder="Nhập tên sản phẩm">
+              </label>
+
+              <label>
+                <span>Loại sản phẩm</span>
+                <select [(ngModel)]="sanPhamDangSuaTuDanhSach.loai" name="loaiSuaDanhSach">
+                  <option value="Bong ro">Bóng rổ</option>
+                  <option value="Bong chuyen">Bóng chuyền</option>
+                  <option value="Bong da futsal">Bóng đá & Futsal</option>
+                  <option value="Tap gym workout">Tập Gym & Workout</option>
+                  <option value="Chay bo di bo">Chạy bộ & Đi bộ</option>
+                  <option value="Cau long">Cầu lông</option>
+                  <option value="Pickleball">Pickleball</option>
+                </select>
+              </label>
+
+              <label>
+                <span>Giá sản phẩm</span>
+                <input [(ngModel)]="sanPhamDangSuaTuDanhSach.gia" name="giaSuaDanhSach" type="number"
+                  placeholder="Nhập giá sản phẩm">
+              </label>
+
+              <label class="chon-noi-bat-sua">
+                <input [(ngModel)]="sanPhamDangSuaTuDanhSach.noiBat" name="noiBatSuaDanhSach" type="checkbox">
+                <span>Sản phẩm nổi bật</span>
+              </label>
+            </div>
+
+            <div class="cot-form-sua">
+              <label>
+                <span>Link hình ảnh</span>
+                <input [(ngModel)]="sanPhamDangSuaTuDanhSach.hinh" name="hinhSuaDanhSach"
+                  placeholder="Dán link hình ảnh">
+              </label>
+
+              <label>
+                <span>Mô tả chi tiết</span>
+                <textarea [(ngModel)]="sanPhamDangSuaTuDanhSach.mota" name="motaSuaDanhSach"
+                  placeholder="Nhập mô tả sản phẩm">
+                </textarea>
+              </label>
+            </div>
+
+            <div class="xem-truoc-san-pham-sua">
+              <p>Xem trước hình ảnh</p>
+
+              <img *ngIf="sanPhamDangSuaTuDanhSach.hinh" [src]="sanPhamDangSuaTuDanhSach.hinh"
+                [alt]="sanPhamDangSuaTuDanhSach.ten">
+
+              <div *ngIf="!sanPhamDangSuaTuDanhSach.hinh" class="khong-co-anh-sua">
+                Chưa có hình ảnh
+              </div>
+            </div>
+
+          </div>
+
+          <div class="nut-form-sua-san-pham">
+            <button type="button" class="nut-huy-sua" (click)="dongFormSuaTuDanhSach()">
+              Hủy
+            </button>
+
+            <button type="submit" class="nut-luu-sua">
+              Cập nhật sản phẩm
+            </button>
+          </div>
+
+        </form>
+
+        <!-- DANH SÁCH SẢN PHẨM -->
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <div>
+              <h2>Danh sách tất cả sản phẩm</h2>
+              <p>
+                Hiển thị {{danhSachSanPhamHienThi.length}} /
+                {{danhSachSanPhamTheoLoai.length}} sản phẩm
+              </p>
+            </div>
+          </div>
+
+          <div class="bo-loc-loai-admin">
+            <button *ngFor="let loai of cacLoaiSanPham" type="button"
+              [class.loai-dang-chon]="loaiSanPhamDangChon === loai.giaTri" (click)="chonLoaiSanPham(loai.giaTri)">
+              {{loai.tenHienThi}}
+            </button>
+          </div>
+
+          <div *ngIf="danhSachSanPhamTheoLoai.length === 0" class="empty-state">
+            Không có sản phẩm nào thuộc loại này.
+          </div>
+
+          <div *ngIf="danhSachSanPhamTheoLoai.length > 0" class="luoi-san-pham-admin">
+            <article *ngFor="let sp of danhSachSanPhamHienThi" class="the-san-pham-admin">
+
+              <div class="anh-san-pham-admin-wrap">
+                <img [src]="sp.hinh" [alt]="sp.ten">
+              </div>
+
+              <div class="noi-dung-san-pham-admin">
+                <div class="dong-loai-admin">
+                  <span>{{sp.loai}}</span>
+                  <small *ngIf="sp.noiBat">Nổi bật</small>
+                </div>
+
+                <h3>{{sp.ten}}</h3>
+
+                <p class="mo-ta-admin">
+                  {{sp.mota}}
+                </p>
+
+                <strong>{{sp.gia | number}} đ</strong>
+
+                <div class="nut-thao-tac-san-pham-admin">
+                  <button type="button" class="nut-sua-card" (click)="moFormSuaTuDanhSach(sp)">
+                    Sửa
+                  </button>
+
+                  <button type="button" class="nut-xoa-card" (click)="xoaSanPhamTuDanhSach(sp.id)">
+                    Xóa
+                  </button>
+                </div>
+              </div>
+
+            </article>
+          </div>
+
+          <div *ngIf="tongTrangSanPham > 1" class="phan-trang-san-pham-admin">
+            <button *ngFor="let trang of cacTrangSanPham" type="button" [class.trang-dang-chon]="trangSanPham === trang"
+              (click)="chonTrangSanPham(trang)">
+              {{trang}}
+            </button>
+          </div>
+
+        </section>
+
+      </section>
+
+      <!-- ORDERS -->
+      <section *ngIf="tabDangChon==='orders'" class="admin-noi-dung">
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <h2>Quản lý đơn hàng</h2>
+            <p>Theo dõi trạng thái đơn hàng</p>
+          </div>
+
+          <div *ngIf="donHangMoi.length === 0" class="empty-state">
+            Chưa có đơn hàng nào.
+          </div>
+
+          <table *ngIf="donHangMoi.length > 0" class="bang-admin-moi">
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>Email</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let dh of donHangMoi">
+                <td>{{dh.ma}}</td>
+                <td>{{dh.khachHang}}</td>
+                <td>{{dh.email}}</td>
+                <td>{{dh.ngay}}</td>
+                <td>{{dh.tongTien | number}} đ</td>
+                <td>{{dh.trangThai}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </section>
+
+      <!-- REPORTS -->
+      <section *ngIf="tabDangChon==='reports'" class="admin-noi-dung">
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <h2>Báo cáo kinh doanh</h2>
+            <p>Tổng quan hiệu quả bán hàng</p>
+          </div>
+
+          <div class="empty-state">
+            Có thể mở rộng: báo cáo doanh thu, sản phẩm bán chạy, khách hàng tiềm năng, tồn kho.
+          </div>
+        </section>
+      </section>
+
+      <!-- SETTINGS -->
+      <section *ngIf="tabDangChon==='settings'" class="admin-noi-dung">
+        <section class="hop-admin">
+          <div class="tieu-de-hop">
+            <h2>Cài đặt hệ thống</h2>
+            <p>Thông tin cửa hàng STRIDEX</p>
+          </div>
+
+          <div class="form-admin-moi">
+            <input value="STRIDEX Sport Store">
+            <input value="support@stridex.vn">
+            <input value="Quy Nhơn, Bình Định">
+            <button class="nut-chinh-admin">Lưu cài đặt</button>
+          </div>
+        </section>
+      </section>
+
+    </ng-container>
+
+  </main>
+</section>

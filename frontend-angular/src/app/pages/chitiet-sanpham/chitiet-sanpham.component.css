@@ -1,0 +1,59 @@
+/* ========================= */
+/* CHI TIET SAN PHAM */
+/* ========================= */
+.chi-tiet-san-pham {
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+.khung-chi-tiet-san-pham {
+    display: grid;
+    gap: 40px;
+}
+
+.anh-chi-tiet-san-pham {
+    width: 100%;
+    height: 520px;
+    border-radius: 32px;
+    object-fit: cover;
+    box-shadow: var(--mau-bong);
+}
+
+.noi-dung-chi-tiet-san-pham {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.loai-chi-tiet-san-pham {
+    color: var(--mau-chu-dao);
+    font-weight: 800;
+}
+
+.ten-chi-tiet-san-pham {
+    margin-top: 12px;
+    color: var(--mau-toi);
+    font-size: 48px;
+    font-weight: 900;
+}
+
+.mo-ta-chi-tiet-san-pham {
+    margin-top: 20px;
+    color: var(--mau-chu-phu);
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.gia-chi-tiet-san-pham {
+    margin-top: 32px;
+    color: var(--mau-diem-nhan);
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.nut-chi-tiet-san-pham {
+    margin-top: 32px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}

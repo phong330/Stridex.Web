@@ -1,0 +1,94 @@
+
+/* ========================= */
+/* GIO HANG */
+/* ========================= */
+.trang-gio-hang {
+    padding-top: 48px;
+    padding-bottom: 48px;
+}
+
+.bo-cuc-gio-hang {
+    display: grid;
+    gap: 32px;
+}
+
+.danh-sach-gio-hang {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dong-gio-hang {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+}
+
+.anh-gio-hang {
+    width: 112px;
+    height: 112px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.noi-dung-gio-hang {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.ten-gio-hang {
+    color: var(--mau-toi);
+    font-weight: 900;
+}
+
+.gia-gio-hang {
+    color: var(--mau-diem-nhan);
+}
+
+.nut-xoa {
+    padding: 8px 16px;
+}
+
+.tom-tat-gio-hang {
+    height: max-content;
+    padding: 24px;
+}
+
+.tom-tat-gio-hang h2 {
+    color: var(--mau-toi);
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.so-luong-gio-hang {
+    margin-top: 16px;
+    color: var(--mau-chu-phu);
+}
+
+.tong-tien-gio-hang {
+    margin-top: 16px;
+    color: var(--mau-diem-nhan);
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.nut-thanh-toan {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.gio-hang-rong {
+    padding: 40px;
+    text-align: center;
+}
+
+.gio-hang-rong p {
+    color: var(--mau-chu-phu);
+}
+
+.nut-mua-san-pham {
+    margin-top: 24px;
+}

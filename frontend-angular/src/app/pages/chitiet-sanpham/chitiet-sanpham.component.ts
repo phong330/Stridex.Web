@@ -4,29 +4,16 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SanphamService } from '../../services/sanpham.service';
 import { GiohangService } from '../../services/giohang.service';
 import { SanPham } from '../../models/sanpham';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chitiet-sanpham',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  template: `
-  <section id="chi-tiet-san-pham" class="khung chi-tiet-san-pham" *ngIf="sanpham">
-    <div class="khung-chi-tiet-san-pham">
-      <img [src]="sanpham.hinh" class="anh-chi-tiet-san-pham">
-      
-      <div class="noi-dung-chi-tiet-san-pham">
-        <p class="loai-chi-tiet-san-pham">{{sanpham.loai}}</p>
-        <h1 class="ten-chi-tiet-san-pham">{{sanpham.ten}}</h1>
-        <p class="mo-ta-chi-tiet-san-pham">{{sanpham.mota}}</p>
-        <p class="gia-chi-tiet-san-pham">{{sanpham.gia | number}} d</p>
-
-        <div class="nut-chi-tiet-san-pham">
-          <button (click)="themGioHang()" class="nut-do">Thêm vào giỏ</button>
-          <a routerLink="/san-pham" class="nut-vien">Quay lại</a>
-        </div>
-      </div>
-    </div>
-  </section>`
+  templateUrl: './chitiet-sanpham.html',
+  styleUrls: ['./chitiet-sanpham.component.css']
 })
 export class ChitietSanphamComponent {
   sanpham?: SanPham;
@@ -34,13 +21,27 @@ export class ChitietSanphamComponent {
   constructor(
     route: ActivatedRoute,
     private sanphamService: SanphamService,
-    private giohang: GiohangService
+    private giohang: GiohangService,
+    private auth: AuthService,
+    private router: Router
   ) {
     const id = Number(route.snapshot.paramMap.get('id'));
-    this.sanphamService.layTheoId(id).subscribe(sp => this.sanpham = sp);
+
+    this.sanphamService.layTheoId(id).subscribe(sp => {
+      this.sanpham = sp;
+    });
   }
 
   themGioHang() {
-    if (this.sanpham) this.giohang.them(this.sanpham);
+    if (!this.auth.daDangNhap()) {
+      alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!');
+      this.router.navigate(['/dang-nhap']);
+      return;
+    }
+
+    if (this.sanpham) {
+      this.giohang.them(this.sanpham);
+      alert('Đã thêm sản phẩm vào giỏ hàng!');
+    }
   }
 }

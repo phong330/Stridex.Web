@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { GiohangService } from '../../services/giohang.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-thanh-dieu-huong',
@@ -34,10 +35,11 @@ import { GiohangService } from '../../services/giohang.service';
       ☰ Danh mục sản phẩm
     </button>
 
-    <a routerLink="">Pickleball chính hãng</a>
-    <a routerLink="">Giày bóng đá chính hãng</a>
-    <a routerLink="">Giày bóng chuyền Sao Vàng</a>
-    <a routerLink="">Just Play Style</a>
+  <a routerLink="/" fragment="giay-the-thao">Giày thể thao</a>
+  <a routerLink="/" fragment="ao-the-thao">Áo thể thao</a>
+  <a routerLink="/" fragment="quan-the-thao">Quần thể thao</a>
+  <a routerLink="/" fragment="phu-kien-the-thao">Phụ kiện thể thao</a>
+  <a routerLink="/" fragment="bong-the-thao">Bóng thể thao</a>
   </nav>
 
   <section id="bang-danh-muc" *ngIf="hienDanhMuc">
@@ -116,7 +118,10 @@ export class ThanhDieuHuongComponent {
   soLuong = 0;
   hienDanhMuc = false;
 
-  constructor(private giohang: GiohangService) {
+  constructor(
+    private giohang: GiohangService,
+    public auth: AuthService
+  ) {
     this.giohang.danhSach$.subscribe(ds => this.soLuong = ds.length);
   }
 
