@@ -1,0 +1,240 @@
+.hop-tai-khoan-header {
+    position: relative;
+}
+
+.nut-tai-khoan {
+    border: none;
+    cursor: pointer;
+}
+
+.menu-tai-khoan-header {
+    position: absolute;
+    top: 52px;
+    right: 0;
+    width: 240px;
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 16px 40px rgba(9, 30, 66, 0.18);
+    z-index: 9999;
+}
+
+.dong-xin-chao {
+    margin: 0;
+    padding-bottom: 12px;
+    color: var(--mau-toi);
+    font-weight: 900;
+    border-bottom: 1px solid #edf2f7;
+    line-height: 1.4;
+}
+
+.nut-dang-xuat-header {
+    width: 100%;
+    margin-top: 12px;
+    border: none;
+    border-radius: 12px;
+    background: var(--mau-diem-nhan);
+    color: white;
+    padding: 12px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.nut-dang-xuat-header:hover {
+    opacity: 0.9;
+}
+
+.link-dang-nhap-header {
+    display: block;
+    text-decoration: none;
+    color: var(--mau-toi);
+    font-weight: 900;
+    padding: 10px 0;
+}
+
+.link-dang-nhap-header:hover {
+    color: var(--mau-diem-nhan);
+}
+
+.nut-gio-hang {
+    position: relative;
+}
+
+.so-luong-gio-hang-header {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--mau-diem-nhan);
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .menu-tai-khoan-header {
+        right: -60px;
+        width: 220px;
+    }
+}
+
+/* ========================= */
+/* DOI MAU THANH DIEU HUONG GIONG WEB .NET */
+/* ========================= */
+
+#dau-trang {
+    background: #0b0d14;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#thanh-tren {
+    background: #0b0d14;
+    border-bottom: none;
+}
+
+#logo {
+    color: #ffffff;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+#logo span:last-child {
+    color: #ffffff;
+}
+
+#logo span:last-child::after {
+    content: ".VN";
+    color: #ef233c;
+    margin-left: 2px;
+}
+
+#bieu-tuong-logo {
+    display: none;
+}
+
+/* Ô tìm kiếm vẫn giữ màu sáng cho dễ nhìn */
+#dau-trang #o-tim-kiem {
+    background: #ffffff;
+    color: #0b0d14;
+}
+
+/* Nhóm icon bên phải */
+#nhom-bieu-tuong {
+    align-items: center;
+}
+
+/* Icon tròn đổi thành kiểu viền trắng / nền tối */
+.nut-tron {
+    background: transparent;
+    color: #f5f5f5;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    font-size: 17px;
+}
+
+.nut-tron:hover {
+    background: #ffffff;
+    color: #0b0d14;
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Icon giỏ hàng nổi bật giống nút viền */
+.nut-gio-hang {
+    border-radius: 999px;
+    padding: 0 16px;
+    width: auto;
+    min-width: 44px;
+    gap: 8px;
+}
+
+/* Badge số lượng giỏ hàng */
+.so-luong-gio-hang-header {
+    background: #ef233c;
+    color: #ffffff;
+}
+
+/* Menu dòng dưới */
+#thanh-menu {
+    background: #0b0d14;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#thanh-menu a {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+#thanh-menu a:hover {
+    color: #ffffff;
+}
+
+/* Nút danh mục */
+#nut-danh-muc {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+#nut-danh-muc:hover {
+    background: #ffffff;
+    color: #0b0d14;
+}
+
+/* Dropdown tài khoản giữ nền trắng cho dễ đọc */
+.menu-tai-khoan-header {
+    background: #ffffff;
+    color: #0b0d14;
+}
+
+.dong-xin-chao {
+    color: #0b0d14;
+}
+
+.link-dang-nhap-header {
+    color: #0b0d14;
+}
+
+.link-dang-nhap-header:hover {
+    color: #ef233c;
+}
+
+.nut-dang-xuat-header {
+    background: #ef233c;
+    color: #ffffff;
+}
+
+#o-tim-kiem {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 28px;
+    padding: 0 16px;
+    height: 54px;
+    width: 900px;
+}
+
+#o-tim-kiem input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 20px;
+    padding: 0 12px;
+}
+
+#nut-tim-kiem {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 20px;
+    color: #111827;
+}
+
+#nut-tim-kiem:hover {
+    color: #e11d48;
+}

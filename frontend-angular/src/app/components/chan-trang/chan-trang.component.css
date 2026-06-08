@@ -1,0 +1,94 @@
+#chan-trang {
+  background: #091e42;
+  color: white;
+  padding-top: 48px;
+  margin-top: 60px;
+}
+
+.chan-trang-khung {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.3fr;
+  gap: 36px;
+  padding-bottom: 36px;
+}
+
+.cot-footer h2 {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+
+.cot-footer h2 span {
+  color: #ff3366;
+}
+
+.cot-footer h3 {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.cot-footer p,
+.cot-footer a {
+  display: block;
+  color: #dfe1e6;
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.cot-footer a:hover {
+  color: #ff3366;
+}
+
+.cot-footer i {
+  margin-right: 8px;
+  color: #ff3366;
+}
+
+.mang-xa-hoi {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mang-xa-hoi a {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  transition: .3s;
+}
+
+.mang-xa-hoi a i {
+  margin: 0;
+  color: white;
+}
+
+.mang-xa-hoi a:hover {
+  background: #ff3366;
+  border-color: #ff3366;
+  transform: translateY(-3px);
+}
+
+.thanh-toan {
+  color: #b8c1d1 !important;
+}
+
+.ban-quyen {
+  border-top: 1px solid rgba(255,255,255,.12);
+  text-align: center;
+  padding: 18px 12px;
+  color: #b8c1d1;
+  font-size: 14px;
+}
+
+@media(max-width: 768px) {
+  .chan-trang-khung {
+    grid-template-columns: 1fr;
+  }
+}

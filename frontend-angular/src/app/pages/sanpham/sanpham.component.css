@@ -1,0 +1,63 @@
+.trang-san-pham {
+  padding-top: 48px;
+  padding-bottom: 48px;
+  background: var(--mau-nen);
+}
+
+.dau-trang-san-pham {
+  margin-bottom: 40px;
+}
+
+.dau-trang-san-pham p {
+  color: var(--mau-chu-dao);
+  font-weight: 800;
+}
+
+.dau-trang-san-pham h1 {
+  color: var(--mau-toi);
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.bo-loc-san-pham {
+  margin-bottom: 32px;
+  display: grid;
+  gap: 16px;
+}
+
+.o-loc-san-pham {
+  width: 100%;
+  border: 1px solid var(--mau-vien);
+  border-radius: 16px;
+  background: var(--mau-trang);
+  color: var(--mau-toi);
+  padding: 16px 20px;
+  outline: none;
+}
+
+.o-loc-san-pham:focus {
+  border-color: var(--mau-chu-dao);
+}
+
+.luoi-san-pham {
+  display: grid;
+  gap: 24px;
+}
+
+.khong-co-san-pham {
+  padding: 32px;
+  text-align: center;
+  color: var(--mau-chu-phu);
+}
+
+@media(min-width:640px) {
+  .luoi-san-pham {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media(min-width:1024px) {
+  .luoi-san-pham {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

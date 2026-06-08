@@ -6,21 +6,8 @@ import { Router } from '@angular/router';
 import { SanphamService } from '../../services/sanpham.service';
 import { SanPham } from '../../models/sanpham';
 import { AuthService } from '../../services/auth.service';
-
-interface DonHangAdmin {
-  ma: string;
-  khachHang: string;
-  email?: string;
-  ngay: string;
-  tongTien: number;
-  trangThai: string;
-}
-
-interface DoanhThuThang {
-  thang: string;
-  doanhThu?: number;
-  phanTram: number;
-}
+import { DonhangService, DonHangAdmin, DoanhThuThang } from '../../services/donhang.service';
+import { NguoidungService, NguoiDungAdmin } from '../../services/nguoidung.service';
 
 @Component({
   selector: 'app-admin',
@@ -30,27 +17,48 @@ interface DoanhThuThang {
   styleUrls: ['./admin.css']
 })
 export class AdminComponent {
+  // =========================
+  // TRẠNG THÁI GIAO DIỆN
+  // =========================
+
   tabDangChon = 'dashboard';
   tuKhoaAdmin = '';
   dangTai = true;
   cheDoToi = false;
   hienMenuAdmin = false;
 
+  // =========================
+  // DỮ LIỆU CHÍNH
+  // =========================
+
   dsSanPham: SanPham[] = [];
   dsNoiBat: SanPham[] = [];
+  dsNguoiDung: NguoiDungAdmin[] = [];
 
-  dangSua = false;
+  donHangMoi: DonHangAdmin[] = [];
+  doanhThuThang: DoanhThuThang[] = [];
 
-  trangDonHang = 1;
-  soDonMoiTrang = 5;
+  // =========================
+  // THỐNG KÊ DASHBOARD
+  // =========================
 
   tongDoanhThu = 0;
   tongDonHang = 0;
   tongNguoiDung = 0;
   tiLeTangTruong = 0;
 
-  doanhThuThang: DoanhThuThang[] = [];
-  donHangMoi: DonHangAdmin[] = [];
+  // =========================
+  // PHÂN TRANG ĐƠN HÀNG
+  // =========================
+
+  trangDonHang = 1;
+  soDonMoiTrang = 5;
+
+  // =========================
+  // FORM THÊM / SỬA SẢN PHẨM
+  // =========================
+
+  dangSua = false;
 
   sanPhamDangSua: SanPham = {
     id: 0,
@@ -127,10 +135,12 @@ export class AdminComponent {
 
   constructor(
     private sanphamService: SanphamService,
+    private donhangService: DonhangService,
+    private nguoidungService: NguoidungService,
     public auth: AuthService,
     private router: Router
   ) {
-    this.taiSanPham();
+    this.taiTatCaDuLieu();
   }
 
   // =========================
@@ -148,12 +158,12 @@ export class AdminComponent {
   get tieuDeTrang() {
     const ten: any = {
       dashboard: 'Dashboard',
-      users: 'Users',
-      orders: 'Orders',
+      users: 'Quản lý người dùng',
+      orders: 'Quản lý đơn hàng',
       products: 'Thêm / sửa sản phẩm',
       productList: 'Tất cả sản phẩm',
-      reports: 'Reports',
-      settings: 'Settings'
+      reports: 'Báo cáo',
+      settings: 'Cài đặt'
     };
 
     return ten[this.tabDangChon] ?? 'Admin';
@@ -173,27 +183,46 @@ export class AdminComponent {
   }
 
   // =========================
+  // TẢI DỮ LIỆU DASHBOARD
+  // =========================
+
+  taiTatCaDuLieu() {
+    this.dangTai = true;
+
+    this.taiSanPham();
+    this.taiDonHang();
+    this.taiDoanhThuTheoThang();
+    this.taiNguoiDung();
+  }
+
+  capNhatThongKe() {
+    this.tongDonHang = this.donHangMoi.length;
+    this.tongNguoiDung = this.dsNguoiDung.length;
+
+    this.tongDoanhThu = this.donHangMoi.reduce(
+      (tong, dh) => tong + Number(dh.tongTien),
+      0
+    );
+
+    this.tiLeTangTruong = this.tongDonHang > 0 ? 12 : 0;
+  }
+
+  // =========================
   // SẢN PHẨM TỪ SQL
   // =========================
 
   taiSanPham() {
-    this.dangTai = true;
-
     this.sanphamService.layTatCa().subscribe({
       next: (ds) => {
         this.dsSanPham = ds;
         this.dsNoiBat = ds.filter(sp => sp.noiBat);
-
-        this.tongDoanhThu = 0;
-        this.tongDonHang = this.donHangMoi.length;
-        this.tongNguoiDung = 0;
-        this.tiLeTangTruong = 0;
-
+        this.capNhatThongKe();
         this.dangTai = false;
       },
       error: () => {
         this.dsSanPham = [];
         this.dsNoiBat = [];
+        this.capNhatThongKe();
         this.dangTai = false;
         alert('Không tải được danh sách sản phẩm từ SQL!');
       }
@@ -201,7 +230,98 @@ export class AdminComponent {
   }
 
   // =========================
-  // FORM THÊM / SỬA SẢN PHẨM CŨ
+  // ĐƠN HÀNG TỪ SQL
+  // =========================
+
+  taiDonHang() {
+    this.donhangService.layTatCaDonHang().subscribe({
+      next: (ds) => {
+        this.donHangMoi = ds;
+        this.trangDonHang = 1;
+        this.capNhatThongKe();
+      },
+      error: () => {
+        this.donHangMoi = [];
+        this.capNhatThongKe();
+      }
+    });
+  }
+
+  taiDoanhThuTheoThang() {
+    this.donhangService.layDoanhThuTheoThang().subscribe({
+      next: (ds) => {
+        this.doanhThuThang = ds;
+      },
+      error: () => {
+        this.doanhThuThang = [];
+      }
+    });
+  }
+
+  capNhatTrangThaiDonHang(dh: DonHangAdmin) {
+    this.donhangService.capNhatTrangThai(dh.id, dh.trangThai).subscribe({
+      next: () => {
+        alert('Cập nhật trạng thái đơn hàng thành công!');
+        this.taiDonHang();
+      },
+      error: () => {
+        alert('Cập nhật trạng thái đơn hàng thất bại!');
+      }
+    });
+  }
+
+  get donHangHienThi() {
+    const batDau = (this.trangDonHang - 1) * this.soDonMoiTrang;
+    return this.donHangMoi.slice(batDau, batDau + this.soDonMoiTrang);
+  }
+
+  get tongTrangDonHang() {
+    return Math.ceil(this.donHangMoi.length / this.soDonMoiTrang);
+  }
+
+  doiTrangDonHang(kieu: number) {
+    const trangMoi = this.trangDonHang + kieu;
+
+    if (trangMoi < 1 || trangMoi > this.tongTrangDonHang) {
+      return;
+    }
+
+    this.trangDonHang = trangMoi;
+  }
+
+  // =========================
+  // NGƯỜI DÙNG TỪ SQL
+  // =========================
+
+  taiNguoiDung() {
+    this.nguoidungService.layTatCa().subscribe({
+      next: (ds) => {
+        this.dsNguoiDung = ds;
+        this.capNhatThongKe();
+      },
+      error: () => {
+        this.dsNguoiDung = [];
+        this.capNhatThongKe();
+      }
+    });
+  }
+
+  get danhSachNguoiDungLoc() {
+    const tuKhoa = this.tuKhoaAdmin.toLowerCase().trim();
+
+    if (!tuKhoa) {
+      return this.dsNguoiDung;
+    }
+
+    return this.dsNguoiDung.filter(nd =>
+      nd.hoTen.toLowerCase().includes(tuKhoa) ||
+      nd.email.toLowerCase().includes(tuKhoa) ||
+      nd.vaiTro.toLowerCase().includes(tuKhoa)
+    );
+  }
+
+  // =========================
+  // FORM THÊM / SỬA SẢN PHẨM
   // =========================
 
   luuSanPham() {
@@ -309,7 +429,6 @@ export class AdminComponent {
 
   // =========================
   // DANH SÁCH TẤT CẢ SẢN PHẨM
-  // LỌC THEO LOẠI + PHÂN TRANG 16 SẢN PHẨM
   // =========================
 
   get danhSachSanPhamTheoLoai() {
@@ -332,8 +451,19 @@ export class AdminComponent {
     return danhSach;
   }
 
+  get danhSachSanPhamHienThi() {
+    const batDau = (this.trangSanPham - 1) * this.soSanPhamMoiTrang;
+
+    return this.danhSachSanPhamTheoLoai.slice(
+      batDau,
+      batDau + this.soSanPhamMoiTrang
+    );
+  }
+
   get tongTrangSanPham() {
-    return Math.ceil(this.danhSachSanPhamTheoLoai.length / this.soSanPhamMoiTrang);
+    return Math.ceil(
+      this.danhSachSanPhamTheoLoai.length / this.soSanPhamMoiTrang
+    );
   }
 
   get cacTrangSanPham() {
@@ -343,15 +473,8 @@ export class AdminComponent {
     );
   }
 
-  get danhSachSanPhamHienThi() {
-    const batDau = (this.trangSanPham - 1) * this.soSanPhamMoiTrang;
-    const ketThuc = batDau + this.soSanPhamMoiTrang;
-
-    return this.danhSachSanPhamTheoLoai.slice(batDau, ketThuc);
-  }
-
-  chonLoaiSanPham(giaTri: string) {
-    this.loaiSanPhamDangChon = giaTri;
+  chonLoaiSanPham(loai: string) {
+    this.loaiSanPhamDangChon = loai;
     this.trangSanPham = 1;
   }
 
@@ -363,13 +486,10 @@ export class AdminComponent {
     this.dangMoFormSuaDanhSach = true;
     this.sanPhamDangSuaTuDanhSach = { ...sp };
 
-    setTimeout(() => {
-      const form = document.getElementById('form-sua-san-pham-danh-sach');
-      form?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }, 100);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   dongFormSuaTuDanhSach() {
@@ -389,11 +509,6 @@ export class AdminComponent {
   capNhatSanPhamTuDanhSach() {
     if (!this.sanPhamDangSuaTuDanhSach.ten.trim()) {
       alert('Vui lòng nhập tên sản phẩm!');
-      return;
-    }
-
-    if (!this.sanPhamDangSuaTuDanhSach.hinh.trim()) {
-      alert('Vui lòng nhập link hình ảnh!');
       return;
     }
 
@@ -420,42 +535,6 @@ export class AdminComponent {
   }
 
   xoaSanPhamTuDanhSach(id: number) {
-    const dongY = confirm('Tôi có chắc muốn xóa sản phẩm này không?');
-
-    if (!dongY) return;
-
-    this.sanphamService.xoaSanPham(id).subscribe({
-      next: () => {
-        alert('Xóa sản phẩm thành công!');
-        this.taiSanPham();
-
-        if (this.danhSachSanPhamHienThi.length === 0 && this.trangSanPham > 1) {
-          this.trangSanPham--;
-        }
-      },
-      error: () => {
-        alert('Xóa sản phẩm thất bại!');
-      }
-    });
-  }
-
-  // =========================
-  // ĐƠN HÀNG
-  // =========================
-
-  get donHangHienThi() {
-    const batDau = (this.trangDonHang - 1) * this.soDonMoiTrang;
-    const ketThuc = batDau + this.soDonMoiTrang;
-
-    return this.donHangMoi.slice(batDau, ketThuc);
-  }
-
-  doiTrangDonHang(huong: number) {
-    const tongTrang = Math.ceil(this.donHangMoi.length / this.soDonMoiTrang);
-    const trangMoi = this.trangDonHang + huong;
-
-    if (trangMoi >= 1 && trangMoi <= tongTrang) {
-      this.trangDonHang = trangMoi;
-    }
+    this.xoaSanPham(id);
   }
 }

@@ -35,7 +35,7 @@ export interface DoanhThuThang {
 export class DonhangService {
   private api = 'http://localhost:5000/api/donhang';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   taoDonHang(data: TaoDonHangRequest): Observable<any> {
     return this.http.post(this.api, data);
@@ -47,5 +47,16 @@ export class DonhangService {
 
   layDoanhThuTheoThang(): Observable<DoanhThuThang[]> {
     return this.http.get<DoanhThuThang[]>(`${this.api}/doanh-thu-thang`);
+  }
+  layDonHangTheoNguoiDung(nguoiDungId: number): Observable<DonHangAdmin[]> {
+    return this.http.get<DonHangAdmin[]>(
+      `${this.api}/nguoi-dung/${nguoiDungId}`
+    );
+  }
+
+  capNhatTrangThai(id: number, trangThai: string): Observable<any> {
+    return this.http.put(`${this.api}/${id}/trang-thai`, {
+      trangThai
+    });
   }
 }

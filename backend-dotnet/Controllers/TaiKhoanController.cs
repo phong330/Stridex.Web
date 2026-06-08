@@ -11,6 +11,22 @@ namespace StridexApi.Controllers
     {
         private readonly AppDbContext _context;
 
+        [HttpGet]
+        public async Task<IActionResult> LayTatCaNguoiDung()
+        {
+            var danhSach = await _context.NguoiDungs
+                .Select(nd => new
+                {
+                    id = nd.Id,
+                    hoTen = nd.HoTen,
+                    email = nd.Email,
+                    vaiTro = nd.VaiTro
+                })
+                .OrderByDescending(nd => nd.id)
+                .ToListAsync();
+
+            return Ok(danhSach);
+        }
         public TaiKhoanController(AppDbContext context)
         {
             _context = context;

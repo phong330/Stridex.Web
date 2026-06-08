@@ -1,0 +1,72 @@
+.trang-dang-nhap {
+  min-height: 650px;
+  display: grid;
+  place-items: center;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.form-dang-nhap {
+  width: 100%;
+  max-width: 448px;
+  padding: 32px;
+}
+
+.chu-chao-mung {
+  color: var(--mau-chu-dao);
+  font-weight: 800;
+}
+
+.tieu-de-dang-nhap {
+  margin-bottom: 24px;
+  color: var(--mau-toi);
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.nhom-o-nhap {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.nhom-o-nhap span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--mau-chu-phu);
+  font-size: 14px;
+}
+
+.o-nhap {
+  width: 100%;
+  border: 1px solid var(--mau-vien);
+  border-radius: 16px;
+  background: var(--mau-trang);
+  color: var(--mau-toi);
+  padding: 16px 20px;
+  outline: none;
+}
+
+.o-nhap:focus {
+  border-color: var(--mau-chu-dao);
+}
+
+.thong-bao-loi {
+  margin-bottom: 16px;
+  color: var(--mau-diem-nhan);
+  font-size: 14px;
+}
+
+.nut-dang-nhap-day-du {
+  width: 100%;
+}
+
+.goi-y-chuyen-trang {
+  margin-top: 18px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.goi-y-chuyen-trang a {
+  color: var(--mau-diem-nhan);
+  font-weight: 800;
+}

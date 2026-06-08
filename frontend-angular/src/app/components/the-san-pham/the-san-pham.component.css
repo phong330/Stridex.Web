@@ -1,0 +1,96 @@
+.the-san-pham {
+  overflow: hidden;
+  transition: all .5s ease;
+}
+
+.the-san-pham:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 82, 204, .35);
+  box-shadow: 0 18px 42px rgba(9, 30, 66, .16);
+}
+
+.anh-san-pham-link {
+  display: block;
+  overflow: hidden;
+  background: #E9EEF6;
+}
+
+.anh-san-pham {
+  width: 100%;
+  height: 288px;
+  object-fit: cover;
+  transition: transform .7s ease;
+}
+
+.the-san-pham:hover .anh-san-pham {
+  transform: scale(1.1);
+}
+
+.noi-dung-the-san-pham {
+  padding: 20px;
+}
+
+.dong-thong-tin-san-pham,
+.dong-gia-san-pham {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dong-thong-tin-san-pham {
+  margin-bottom: 12px;
+}
+
+.nhan-loai {
+  border-radius: 999px;
+  background: var(--mau-diem-nhan);
+  color: var(--mau-trang);
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.nhan-noi-bat {
+  color: var(--mau-diem-nhan);
+  font-size: 12px;
+}
+
+.ten-san-pham {
+  color: var(--mau-toi);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.mo-ta-san-pham {
+  margin-top: 8px;
+  color: var(--mau-chu-phu);
+  font-size: 14px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dong-gia-san-pham {
+  margin-top: 20px;
+}
+
+.gia-san-pham {
+  color: var(--mau-diem-nhan);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.nut-them {
+  padding: 8px 16px;
+  color: var(--mau-diem-nhan);
+  border-color: var(--mau-diem-nhan);
+  background: var(--mau-trang);
+}
+
+.nut-them:hover {
+  background: var(--mau-diem-nhan);
+  color: var(--mau-trang);
+}

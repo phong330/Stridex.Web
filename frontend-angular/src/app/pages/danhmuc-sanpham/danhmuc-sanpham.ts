@@ -12,25 +12,8 @@ import { DANH_MUC_SAN_PHAM } from '../../shared/danhmuc-sanpham';
   selector: 'app-danhmuc-sanpham',
   standalone: true,
   imports: [CommonModule, TheSanPhamComponent],
-  template: `
-  <section class="khung trang-san-pham">
-    <div class="dau-trang-san-pham">
-      <p>DANH MỤC</p>
-      <h1>{{ tenDanhMuc }}</h1>
-    </div>
-
-    <div *ngIf="danhSachLoc.length > 0; else khongCo" class="luoi-san-pham">
-      <app-the-san-pham
-        *ngFor="let sp of danhSachLoc"
-        [sanpham]="sp">
-      </app-the-san-pham>
-    </div>
-
-    <ng-template #khongCo>
-      <p class="khong-co-san-pham">Không có sản phẩm trong danh mục này.</p>
-    </ng-template>
-  </section>
-  `
+  templateUrl: './danhmuc-sanpham.component.html',
+  styleUrls: ['./danhmuc-sanpham.component.css']
 })
 export class DanhmucSanphamComponent {
   dsSanPham: SanPham[] = [];

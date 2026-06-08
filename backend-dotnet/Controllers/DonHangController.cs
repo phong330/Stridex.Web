@@ -9,6 +9,24 @@ namespace StridexApi.Controllers
     [Route("api/[controller]")]
     public class DonHangController : ControllerBase
     {
+        [HttpGet("nguoi-dung/{nguoiDungId}")]
+        public async Task<IActionResult> LayDonHangTheoNguoiDung(int nguoiDungId)
+        {
+            var danhSach = await _context.DonHangs
+                .Where(dh => dh.NguoiDungId == nguoiDungId)
+                .OrderByDescending(dh => dh.Id)
+                .Select(dh => new
+                {
+                    id = dh.Id,
+                    ma = dh.MaDonHang,
+                    ngay = dh.NgayDat.ToString("dd/MM/yyyy"),
+                    tongTien = dh.TongTien,
+                    trangThai = dh.TrangThai
+                })
+                .ToListAsync();
+
+            return Ok(danhSach);
+        }
         private readonly AppDbContext _context;
 
         public DonHangController(AppDbContext context)
@@ -16,6 +34,34 @@ namespace StridexApi.Controllers
             _context = context;
         }
 
+        public class CapNhatTrangThaiRequest
+        {
+            public string TrangThai { get; set; } = "";
+        }
+        [HttpPut("{id}/trang-thai")]
+        public async Task<IActionResult> CapNhatTrangThai(int id, [FromBody] CapNhatTrangThaiRequest request)
+        {
+            var donHang = await _context.DonHangs.FindAsync(id);
+
+            if (donHang == null)
+            {
+                return NotFound(new
+                {
+                    thongBao = "Không tìm thấy đơn hàng."
+                });
+            }
+
+            donHang.TrangThai = request.TrangThai;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                thongBao = "Cập nhật trạng thái thành công.",
+                id = donHang.Id,
+                trangThai = donHang.TrangThai
+            });
+        }
         [HttpGet]
         public async Task<IActionResult> LayTatCaDonHang()
         {

@@ -1,39 +1,103 @@
 <header id="dau-trang">
 
   <div id="thanh-tren">
-    <a routerLink="/" id="logo">
+
+    <a routerLink="/" id="logo" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
       <span id="bieu-tuong-logo">●●●●●</span>
       <span>STRIDEX.VN</span>
     </a>
 
     <div id="o-tim-kiem">
-      <span (click)="timKiem()">⌕</span>
+      <input type="text" placeholder="Tìm sản phẩm..." [(ngModel)]="tuKhoaTimKiem" (keyup.enter)="timKiemSanPham()" />
 
-      <input
-        [(ngModel)]="tuKhoa"
-        (keyup.enter)="timKiem()"
-        placeholder="Tìm sản phẩm..."
-      />
+      <button type="button" id="nut-tim-kiem" (click)="timKiemSanPham()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
     </div>
 
     <div id="nhom-bieu-tuong">
-      <a routerLink="/trang-chu" class="nut-tron">⌂</a>
-      <a routerLink="" class="nut-tron">♡</a>
-      <a routerLink="/dang-nhap" class="nut-tron">♙</a>
-      <a routerLink="/gio-hang" class="nut-tron">🛒</a>
+
+      <a routerLink="/" class="nut-tron" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+        <i class="fa-solid fa-house"></i>
+      </a>
+
+
+      <a routerLink="/lich-su-don-hang" class="nut-tron" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+        <i class="fa-solid fa-box"></i>
+      </a>
+
+      <div class="hop-tai-khoan-header">
+
+        <button type="button" class="nut-tron nut-tai-khoan" (click)="batTatMenuTaiKhoan()">
+          <i class="fa-solid fa-user"></i>
+        </button>
+
+        <div class="menu-tai-khoan-header" *ngIf="hienMenuTaiKhoan">
+
+          <ng-container *ngIf="nguoiDungDangNhap; else chuaDangNhap">
+
+            <p class="dong-xin-chao">
+              Xin chào, {{nguoiDungDangNhap.hoTen}}
+            </p>
+
+            <button type="button" class="nut-dang-xuat-header" (click)="dangXuat()">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Đăng xuất
+            </button>
+
+          </ng-container>
+
+          <ng-template #chuaDangNhap>
+            <a routerLink="/dang-nhap" class="link-dang-nhap-header" (click)="dongMenuTaiKhoan()">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              Đăng nhập
+            </a>
+          </ng-template>
+
+        </div>
+
+      </div>
+
+      <a routerLink="/gio-hang" class="nut-tron nut-gio-hang" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        <span *ngIf="soLuong > 0" class="so-luong-gio-hang-header">
+          {{soLuong}}
+        </span>
+
+      </a>
+
     </div>
+
   </div>
 
   <nav id="thanh-menu">
-    <button id="nut-danh-muc" (click)="batTatDanhMuc()">
+
+    <button id="nut-danh-muc" type="button" (click)="batTatDanhMuc()">
       ☰ Danh mục sản phẩm
     </button>
 
-    <a routerLink="/" fragment="giay-the-thao">Giày thể thao</a>
-    <a routerLink="/" fragment="ao-the-thao">Áo thể thao</a>
-    <a routerLink="/" fragment="quan-the-thao">Quần thể thao</a>
-    <a routerLink="/" fragment="phu-kien-the-thao">Phụ kiện thể thao</a>
-    <a routerLink="/" fragment="bong-the-thao">Bóng thể thao</a>
+    <a routerLink="/" fragment="giay-the-thao" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+      Giày thể thao
+    </a>
+
+    <a routerLink="/" fragment="ao-the-thao" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+      Áo thể thao
+    </a>
+
+    <a routerLink="/" fragment="quan-the-thao" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+      Quần thể thao
+    </a>
+
+    <a routerLink="/" fragment="phu-kien-the-thao" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+      Phụ kiện thể thao
+    </a>
+
+    <a routerLink="/" fragment="bong-the-thao" (click)="dongDanhMuc(); dongMenuTaiKhoan()">
+      Bóng thể thao
+    </a>
+
   </nav>
 
   <section id="bang-danh-muc" *ngIf="hienDanhMuc">
@@ -49,60 +113,219 @@
     <div id="luoi-danh-muc">
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">BÓNG RỔ</a></h3>
-        <p><a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">Bóng thi đấu</a></p>
-        <p><a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">Giày bóng rổ</a></p>
-        <p><a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">Quần áo</a></p>
-        <p><a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">Phụ kiện bóng rổ</a></p>
+        <h3>
+          <a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">
+            BÓNG RỔ
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">
+            Bóng thi đấu
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">
+            Giày bóng rổ
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">
+            Quần áo
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-ro" (click)="dongDanhMuc()">
+            Phụ kiện bóng rổ
+          </a>
+        </p>
       </div>
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">BÓNG CHUYỀN</a></h3>
-        <p><a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">Bóng thi đấu</a></p>
-        <p><a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">Giày bóng chuyền</a></p>
-        <p><a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">Quần áo</a></p>
-        <p><a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">Phụ kiện bóng chuyền</a></p>
+        <h3>
+          <a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">
+            BÓNG CHUYỀN
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">
+            Bóng thi đấu
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">
+            Giày bóng chuyền
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">
+            Quần áo
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-chuyen" (click)="dongDanhMuc()">
+            Phụ kiện bóng chuyền
+          </a>
+        </p>
       </div>
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">BÓNG ĐÁ & FUTSAL</a></h3>
-        <p><a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">Bóng thi đấu</a></p>
-        <p><a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">Giày bóng đá</a></p>
-        <p><a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">Quần áo</a></p>
-        <p><a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">Phụ kiện bóng đá</a></p>
+        <h3>
+          <a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">
+            BÓNG ĐÁ & FUTSAL
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">
+            Bóng thi đấu
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">
+            Giày bóng đá
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">
+            Quần áo
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/bong-da-futsal" (click)="dongDanhMuc()">
+            Phụ kiện bóng đá
+          </a>
+        </p>
       </div>
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">TẬP GYM & WORKOUT</a></h3>
-        <p><a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">Quần áo</a></p>
-        <p><a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">Giày tập Gym</a></p>
-        <p><a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">Phụ kiện Fitness</a></p>
+        <h3>
+          <a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">
+            TẬP GYM & WORKOUT
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">
+            Quần áo
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">
+            Giày tập Gym
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/tap-gym-workout" (click)="dongDanhMuc()">
+            Phụ kiện Fitness
+          </a>
+        </p>
       </div>
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">CHẠY BỘ & ĐI BỘ</a></h3>
-        <p><a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">Giày chạy bộ</a></p>
-        <p><a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">Quần áo</a></p>
-        <p><a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">Phụ kiện chạy bộ</a></p>
+        <h3>
+          <a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">
+            CHẠY BỘ & ĐI BỘ
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">
+            Giày chạy bộ
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">
+            Quần áo
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/chay-bo-di-bo" (click)="dongDanhMuc()">
+            Phụ kiện chạy bộ
+          </a>
+        </p>
       </div>
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">CẦU LÔNG</a></h3>
-        <p><a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">Vợt cầu lông</a></p>
-        <p><a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">Cầu thi đấu</a></p>
-        <p><a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">Giày cầu lông</a></p>
-        <p><a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">Quần áo</a></p>
-        <p><a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">Phụ kiện cầu lông</a></p>
+        <h3>
+          <a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">
+            CẦU LÔNG
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">
+            Vợt cầu lông
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">
+            Cầu thi đấu
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">
+            Giày cầu lông
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">
+            Quần áo
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/cau-long" (click)="dongDanhMuc()">
+            Phụ kiện cầu lông
+          </a>
+        </p>
       </div>
 
       <div class="cot-danh-muc">
-        <h3><a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">PICKLEBALL</a></h3>
-        <p><a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">Giày Pickleball</a></p>
-        <p><a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">Vợt Pickleball</a></p>
-        <p><a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">Phụ kiện Pickleball</a></p>
+        <h3>
+          <a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">
+            PICKLEBALL
+          </a>
+        </h3>
+
+        <p>
+          <a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">
+            Giày Pickleball
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">
+            Vợt Pickleball
+          </a>
+        </p>
+
+        <p>
+          <a routerLink="/danh-muc/pickleball" (click)="dongDanhMuc()">
+            Phụ kiện Pickleball
+          </a>
+        </p>
       </div>
 
     </div>
+
   </section>
 
 </header>

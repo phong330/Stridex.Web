@@ -1,0 +1,50 @@
+<section id="trang-lich-su-don-hang" class="khung trang-lich-su-don-hang">
+
+  <div class="dau-trang-lich-su">
+    <p>ORDER HISTORY</p>
+    <h1>Lịch sử đơn hàng</h1>
+    <span>Theo dõi các đơn hàng tôi đã đặt tại STRIDEX</span>
+  </div>
+
+  <div *ngIf="dangTai" class="dang-tai-don-hang">
+    Đang tải lịch sử đơn hàng...
+  </div>
+
+  <div *ngIf="!dangTai && dsDonHang.length === 0" class="lich-su-rong">
+    <h2>Tôi chưa có đơn hàng nào</h2>
+    <p>Hãy mua sản phẩm đầu tiên tại STRIDEX để xem lịch sử đơn hàng tại đây.</p>
+
+    <a routerLink="/san-pham" class="nut-do">
+      Mua sản phẩm
+    </a>
+  </div>
+
+  <div *ngIf="!dangTai && dsDonHang.length > 0" class="khung-bang-lich-su">
+
+    <table class="bang-lich-su-don-hang">
+      <thead>
+        <tr>
+          <th>Mã đơn</th>
+          <th>Ngày đặt</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let dh of dsDonHang">
+          <td class="ma-don">{{dh.ma}}</td>
+          <td>{{dh.ngay}}</td>
+          <td class="tong-tien">{{dh.tongTien | number}} đ</td>
+          <td>
+            <span class="trang-thai-don-hang">
+              {{dh.trangThai}}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</section>

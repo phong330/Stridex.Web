@@ -1,0 +1,50 @@
+<section id="trang-san-pham" class="khung trang-san-pham">
+
+  <div class="dau-trang-san-pham">
+    <p>COLLECTION</p>
+    <h1>Danh sách sản phẩm</h1>
+  </div>
+
+  <div class="bo-loc-san-pham">
+
+    <input
+      id="o-tim-kiem"
+      [(ngModel)]="tuKhoa"
+      placeholder="Tìm sản phẩm..."
+      class="o-loc-san-pham">
+
+    <select
+      id="chon-loai"
+      [(ngModel)]="loaiDangChon"
+      class="o-loc-san-pham">
+
+      <option value="Tat ca">Tất cả</option>
+      <option value="Giay">Giày</option>
+      <option value="Ao">Áo</option>
+      <option value="Quan">Quần</option>
+      <option value="Phu kien">Phụ kiện</option>
+
+    </select>
+
+  </div>
+
+  <div
+    *ngIf="danhSachLoc.length > 0; else khongCo"
+    class="luoi-san-pham">
+
+    <app-the-san-pham
+      *ngFor="let sp of danhSachLoc"
+      [sanpham]="sp">
+    </app-the-san-pham>
+
+  </div>
+
+  <ng-template #khongCo>
+
+    <p class="khong-co-san-pham">
+      Không tìm thấy sản phẩm phù hợp.
+    </p>
+
+  </ng-template>
+
+</section>

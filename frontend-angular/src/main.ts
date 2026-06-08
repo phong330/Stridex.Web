@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { filter } from 'rxjs';
-
 import { routes } from './app/app.routes';
 import { ThanhDieuHuongComponent } from './app/components/thanh-dieu-huong/thanh-dieu-huong.component';
 import { ChanTrangComponent } from './app/components/chan-trang/chan-trang.component';

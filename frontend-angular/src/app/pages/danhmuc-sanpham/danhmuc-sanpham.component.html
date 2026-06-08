@@ -1,0 +1,19 @@
+<section class="khung trang-san-pham">
+  <div class="dau-trang-san-pham">
+    <p>DANH MỤC</p>
+    <h1>{{ tenDanhMuc }}</h1>
+  </div>
+
+  <div *ngIf="danhSachLoc.length > 0; else khongCo" class="luoi-san-pham">
+    <app-the-san-pham
+      *ngFor="let sp of danhSachLoc"
+      [sanpham]="sp">
+    </app-the-san-pham>
+  </div>
+
+  <ng-template #khongCo>
+    <p class="khong-co-san-pham">
+      Không có sản phẩm trong danh mục này.
+    </p>
+  </ng-template>
+</section>
