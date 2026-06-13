@@ -1,0 +1,17 @@
+[33md6face69[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Them thanh toan QR va lich su don hang theo tai khoan
+[33m51374f7c[m Giai quyet conflict va them dang nhap Google
+[33ma1b12823[m Them dang nhap bang Google
+[33m9c732138[m Update latest code
+[33ma6470f39[m Update frontend components
+[33mf3ee1cf0[m cap Nhat trang chu, sua doi code, sua chuc nang tim kiem, sua admin
+[33m2f89019e[m Cap nhat dang nhap gio hang va du lieu san pham
+[33m941b6654[m Sua conflict AppDbContext
+[33m6b450458[m Sua conflict sau khi lay code nhom
+[33m1859ebb7[m Lay cap nhat tu repo nhom
+[33mef445e29[m update danh muc sp, gio hang, tim kiem danh muc
+[33m2f4622f1[m Them database script
+[33m4835bf77[m Sua trang chu, sua SQL, them Admin Dashboard
+[33m684e7d99[m cap nhat trang chu
+[33m9c2e8612[m Them file backup database SQL
+[33mc487e3b5[m Hoan thanh dang ky dang nhap ket noi SQL
+[33m56b19d23[m Hoan thanh giao dien va ket noi SQL Server

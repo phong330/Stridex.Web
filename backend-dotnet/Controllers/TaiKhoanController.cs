@@ -1,94 +1,204 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StridexApi.Data;
-using StridexApi.Models;
+using Microsoft.Data.SqlClient;
+using Google.Apis.Auth;
 
 namespace StridexApi.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class TaiKhoanController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        [HttpGet]
-        public async Task<IActionResult> LayTatCaNguoiDung()
-        {
-            var danhSach = await _context.NguoiDungs
-                .Select(nd => new
-                {
-                    id = nd.Id,
-                    hoTen = nd.HoTen,
-                    email = nd.Email,
-                    vaiTro = nd.VaiTro
-                })
-                .OrderByDescending(nd => nd.id)
-                .ToListAsync();
+        private const string GoogleClientId = "274546988937-svmbcusn3179tsgp854nfc2dismq0sbu.apps.googleusercontent.com";
 
-            return Ok(danhSach);
-        }
-        public TaiKhoanController(AppDbContext context)
+        public TaiKhoanController(IConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost("dang-ky")]
-        public async Task<IActionResult> DangKy(NguoiDung nguoiDung)
+        public IActionResult DangKy([FromBody] TaiKhoanDto tk)
         {
-            var daTonTai = await _context.NguoiDungs
-                .AnyAsync(nd => nd.Email == nguoiDung.Email);
+            string connectionString = _configuration.GetConnectionString("DefaultConnection")!;
 
-            if (daTonTai)
+            string hoTen = tk.HoTen.Trim();
+            string email = tk.Email.Trim().ToLower();
+            string matKhau = tk.MatKhau.Trim();
+
+            using SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+
+            string checkSql = @"SELECT COUNT(*) 
+                                FROM TaiKhoan 
+                                WHERE LOWER(LTRIM(RTRIM(Email))) = @Email";
+
+            using SqlCommand checkCmd = new SqlCommand(checkSql, conn);
+            checkCmd.Parameters.AddWithValue("@Email", email);
+
+            int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+            if (count > 0)
             {
-                return BadRequest(new
-                {
-                    thongBao = "Email đã tồn tại."
-                });
+                return BadRequest(new { message = "Email đã tồn tại!" });
             }
 
-            nguoiDung.VaiTro = "KhachHang";
+            string sql = @"INSERT INTO TaiKhoan (HoTen, Email, MatKhau, VaiTro)
+                           VALUES (@HoTen, @Email, @MatKhau, N'user')";
 
-            _context.NguoiDungs.Add(nguoiDung);
-            await _context.SaveChangesAsync();
+            using SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@HoTen", hoTen);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@MatKhau", matKhau);
 
-            return Ok(new
-            {
-                thongBao = "Đăng ký thành công."
-            });
+            cmd.ExecuteNonQuery();
+
+            return Ok(new { message = "Đăng ký thành công!" });
         }
 
         [HttpPost("dang-nhap")]
-        public async Task<IActionResult> DangNhap([FromBody] DangNhapRequest request)
+        public IActionResult DangNhap([FromBody] DangNhapDto dto)
         {
-            var nguoiDung = await _context.NguoiDungs
-                .FirstOrDefaultAsync(nd =>
-                    nd.Email == request.Email &&
-                    nd.MatKhau == request.MatKhau
-                );
+            string connectionString = _configuration.GetConnectionString("DefaultConnection")!;
 
-            if (nguoiDung == null)
+            string email = dto.Email.Trim().ToLower();
+            string matKhau = dto.MatKhau.Trim();
+
+            using SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+
+            string sql = @"SELECT Id, HoTen, Email, VaiTro 
+                           FROM TaiKhoan 
+                           WHERE LOWER(LTRIM(RTRIM(Email))) = @Email 
+                           AND LTRIM(RTRIM(MatKhau)) = @MatKhau";
+
+            using SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@MatKhau", matKhau);
+
+            using SqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
             {
-                return Unauthorized(new
+                return Ok(new
                 {
-                    thongBao = "Sai email hoặc mật khẩu."
+                    message = "Đăng nhập thành công!",
+                    user = new
+                    {
+                        id = reader["Id"],
+                        hoTen = reader["HoTen"],
+                        email = reader["Email"],
+                        vaiTro = reader["VaiTro"]
+                    }
                 });
             }
 
-            return Ok(new
+            return Unauthorized(new { message = "Email hoặc mật khẩu không đúng!" });
+        }
+
+        [HttpPost("dang-nhap-google")]
+        public async Task<IActionResult> DangNhapGoogle([FromBody] GoogleLoginDto dto)
+        {
+            try
             {
-                id = nguoiDung.Id,
-                hoTen = nguoiDung.HoTen,
-                email = nguoiDung.Email,
-                vaiTro = nguoiDung.VaiTro,
-                thongBao = "Đăng nhập thành công."
-            });
+                if (string.IsNullOrWhiteSpace(dto.IdToken))
+                {
+                    return BadRequest(new { message = "Thiếu Google ID Token!" });
+                }
+
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>
+                    {
+                        GoogleClientId
+                    }
+                };
+
+                var payload = await GoogleJsonWebSignature.ValidateAsync(dto.IdToken, settings);
+
+                string email = payload.Email.Trim().ToLower();
+                string hoTen = string.IsNullOrWhiteSpace(payload.Name) ? email : payload.Name;
+
+                string connectionString = _configuration.GetConnectionString("DefaultConnection")!;
+
+                using SqlConnection conn = new SqlConnection(connectionString);
+                conn.Open();
+
+                string findSql = @"SELECT Id, HoTen, Email, VaiTro 
+                                   FROM TaiKhoan 
+                                   WHERE LOWER(LTRIM(RTRIM(Email))) = @Email";
+
+                using SqlCommand findCmd = new SqlCommand(findSql, conn);
+                findCmd.Parameters.AddWithValue("@Email", email);
+
+                using SqlDataReader reader = findCmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return Ok(new
+                    {
+                        message = "Đăng nhập Google thành công!",
+                        user = new
+                        {
+                            id = reader["Id"],
+                            hoTen = reader["HoTen"],
+                            email = reader["Email"],
+                            vaiTro = reader["VaiTro"]
+                        }
+                    });
+                }
+
+                reader.Close();
+
+                string insertSql = @"INSERT INTO TaiKhoan (HoTen, Email, MatKhau, VaiTro)
+                                     OUTPUT INSERTED.Id
+                                     VALUES (@HoTen, @Email, @MatKhau, N'user')";
+
+                using SqlCommand insertCmd = new SqlCommand(insertSql, conn);
+                insertCmd.Parameters.AddWithValue("@HoTen", hoTen);
+                insertCmd.Parameters.AddWithValue("@Email", email);
+                insertCmd.Parameters.AddWithValue("@MatKhau", "GOOGLE_LOGIN");
+
+                int newId = Convert.ToInt32(insertCmd.ExecuteScalar());
+
+                return Ok(new
+                {
+                    message = "Đăng nhập Google thành công!",
+                    user = new
+                    {
+                        id = newId,
+                        hoTen = hoTen,
+                        email = email,
+                        vaiTro = "user"
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(new
+                {
+                    message = "Token Google không hợp lệ hoặc lỗi xử lý đăng nhập Google!",
+                    error = ex.Message
+                });
+            }
         }
     }
 
-    public class DangNhapRequest
+    public class TaiKhoanDto
+    {
+        public string HoTen { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string MatKhau { get; set; } = "";
+    }
+
+    public class DangNhapDto
     {
         public string Email { get; set; } = "";
-
         public string MatKhau { get; set; } = "";
+    }
+
+    public class GoogleLoginDto
+    {
+        public string IdToken { get; set; } = "";
     }
 }

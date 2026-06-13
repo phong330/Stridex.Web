@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { ThanhToanService } from '../../services/thanhtoan.service';
 import { GiohangService } from '../../services/giohang.service';
 import { AuthService } from '../../services/auth.service';
 import { DonhangService } from '../../services/donhang.service';
@@ -17,56 +17,71 @@ import { SanPham } from '../../models/sanpham';
 })
 export class GiohangComponent {
 
-  dsGioHang:any[]=[];
-  tongTien=0;
+  dsGioHang: any[] = [];
+  tongTien = 0;
 
   constructor(
-    public giohang:GiohangService,
-    private auth:AuthService,
-    private donhangService:DonhangService
-  ){
-    this.giohang.danhSach$.subscribe(ds=>{
-      this.dsGioHang=ds;
-      this.tongTien=this.giohang.tongTien();
+    public giohang: GiohangService,
+    private auth: AuthService,
+    private donhangService: DonhangService,
+    private thanhToanService: ThanhToanService
+  ) {
+    this.giohang.danhSach$.subscribe(ds => {
+      this.dsGioHang = ds;
+      this.tongTien = this.giohang.tongTien();
     });
   }
 
-  tang(sp:any){
+  tang(sp: any) {
     this.giohang.tang(sp);
   }
 
-  giam(sp:any){
+  giam(sp: any) {
     this.giohang.giam(sp);
   }
 
-  xoa(id:number){
+  xoa(id: number) {
     this.giohang.xoa(id);
   }
 
-  thanhToan(){
+  thanhToan() {
 
-    const nguoiDung=this.auth.layNguoiDungDangNhap();
+    const nguoiDung = this.auth.layNguoiDungDangNhap();
 
-    if(!nguoiDung){
+    if (!nguoiDung) {
       alert('Vui lòng đăng nhập!');
       return;
     }
 
-    const chiTiet=this.dsGioHang.map(sp=>({
-      sanPhamId:sp.id,
-      soLuong:sp.soLuong,
-      donGia:sp.gia
+    const chiTiet = this.dsGioHang.map(sp => ({
+      sanPhamId: sp.id,
+      soLuong: sp.soLuong,
+      donGia: sp.gia
     }));
 
     this.donhangService.taoDonHang({
-      nguoiDungId:nguoiDung.id,
+      nguoiDungId: nguoiDung.id,
       chiTiet
     }).subscribe({
-      next:r=>{
-        alert('Đặt hàng thành công! Mã đơn: '+r.maDonHang);
+      next: r => {
+        alert('Đặt hàng thành công! Mã đơn: ' + r.maDonHang);
         this.giohang.xoaTatCa();
       },
-      error:()=>alert('Đặt hàng thất bại!')
+      error: () => alert('Đặt hàng thất bại!')
+    });
+  }
+  thanhToanVnPay() {
+    const maDonHang = 'DH' + new Date().getTime();
+    const soTien = this.tongTien;
+
+    this.thanhToanService.taoThanhToanVnPay(maDonHang, soTien).subscribe({
+      next: (res) => {
+        window.location.href = res.paymentUrl;
+      },
+      error: (err) => {
+        console.error('Lỗi tạo thanh toán VNPay:', err);
+        alert('Không tạo được thanh toán VNPay');
+      }
     });
   }
 }

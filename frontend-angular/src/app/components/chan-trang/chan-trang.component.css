@@ -92,3 +92,19 @@
     grid-template-columns: 1fr;
   }
 }
+
+.ban-do-footer {
+  margin-top: 24px;
+  padding: 0 40px 36px;
+}
+
+.ban-do-footer h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.ban-do-footer iframe {
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+}

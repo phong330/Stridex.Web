@@ -31,6 +31,12 @@
           <button class="btn-auth" type="submit">Đăng nhập</button>
         </div>
 
+        <!-- CHỈ GIỮ GOOGLE, BỎ FACEBOOK -->
+        <div class="google-login-wrap" *ngIf="!dangMoDangKy">
+          <p>Hoặc đăng nhập bằng Google</p>
+          <div id="google-login-button"></div>
+        </div>
+
         <div class="regi-link animation" style="--D:5; --S:26">
           <p>
             Chưa có tài khoản?

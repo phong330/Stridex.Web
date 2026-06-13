@@ -331,3 +331,111 @@
         pointer-events: auto;
     }
 }
+/* ========================= */
+/* SOCIAL LOGIN: FACEBOOK + GOOGLE */
+/* ========================= */
+
+.social-login-wrap {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.social-login-wrap p {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.social-login-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Khung chung cho 2 nút */
+.social-btn {
+    width: 145px;
+    height: 42px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Phần icon bên trái */
+.social-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: 20px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+/* Phần chữ bên phải */
+.social-text {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    padding-right: 10px;
+}
+
+
+/* GOOGLE */
+.google-login-btn {
+    background: linear-gradient(to right, #e44d3a, #f06b43);
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.google-login-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(228, 77, 58, 0.45);
+}
+
+.google-icon {
+    background: rgba(0, 0, 0, 0.12);
+    font-size: 17px;
+    letter-spacing: -1px;
+}
+
+/* Chỗ Google render button */
+.google-login-btn #google-login-button {
+    flex: 1;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 8px;
+}
+
+/* Ẩn bớt style mặc định của Google, ép nằm gọn trong pill */
+.google-login-btn #google-login-button > div {
+    transform: scale(0.88);
+    transform-origin: center;
+}
+
+/* Responsive */
+@media(max-width: 820px) {
+    .social-login-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .social-btn {
+        width: 100%;
+        max-width: 260px;
+    }
+}

@@ -112,3 +112,78 @@
 .chon-so-luong span{
  font-weight:900;
 }
+/* ========================= */
+/* BUTTON THANH TOÁN VNPAY */
+/* ========================= */
+
+.vnpay-btn {
+    width: 100%;
+    max-width: 320px;
+    height: 56px;
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #ffffff, #f4f7ff);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 8px 18px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 80, 180, 0.18);
+    transition: 0.25s ease;
+}
+
+.vnpay-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(0, 80, 180, 0.28);
+}
+
+.vnpay-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(0, 80, 180, 0.2);
+}
+
+.vnpay-logo-box {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #eaf2ff, #ffffff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.vnpay-logo-box img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.vnpay-text {
+    color: #123b6d;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+
+/* Nếu đặt nút trong trang giỏ hàng */
+.vnpay-btn-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .vnpay-btn {
+        max-width: 100%;
+        height: 54px;
+    }
+
+    .vnpay-text {
+        font-size: 15px;
+    }
+}

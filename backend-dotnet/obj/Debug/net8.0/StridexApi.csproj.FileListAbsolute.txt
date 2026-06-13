@@ -302,3 +302,15 @@ C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\obj
 C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\obj\Debug\net8.0\StridexApi.pdb
 C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\obj\Debug\net8.0\StridexApi.genruntimeconfig.cache
 C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\obj\Debug\net8.0\ref\StridexApi.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\MailKit.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\MimeKit.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\Google.Apis.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\Google.Apis.Auth.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\Google.Apis.Core.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\System.CodeDom.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\System.Management.dll
+C:\Phao\AGular web\stridex-angular-dotnet\stridex-sport-store\backend-dotnet\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Management.dll

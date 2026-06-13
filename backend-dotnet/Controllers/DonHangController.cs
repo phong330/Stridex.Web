@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StridexApi.Data;
 using StridexApi.Models;
+using StridexApi.Services;
 
 namespace StridexApi.Controllers
 {
@@ -9,6 +10,19 @@ namespace StridexApi.Controllers
     [Route("api/[controller]")]
     public class DonHangController : ControllerBase
     {
+        private readonly AppDbContext _context;
+        private readonly EmailService _emailService;
+
+        public DonHangController(AppDbContext context, EmailService emailService)
+        {
+            _context = context;
+            _emailService = emailService;
+        }
+
+        // ==============================
+        // LẤY ĐƠN HÀNG THEO NGƯỜI DÙNG
+        // API: GET /api/donhang/nguoi-dung/1
+        // ==============================
         [HttpGet("nguoi-dung/{nguoiDungId}")]
         public async Task<IActionResult> LayDonHangTheoNguoiDung(int nguoiDungId)
         {
@@ -27,17 +41,16 @@ namespace StridexApi.Controllers
 
             return Ok(danhSach);
         }
-        private readonly AppDbContext _context;
 
-        public DonHangController(AppDbContext context)
-        {
-            _context = context;
-        }
-
+        // ==============================
+        // CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG
+        // API: PUT /api/donhang/1/trang-thai
+        // ==============================
         public class CapNhatTrangThaiRequest
         {
             public string TrangThai { get; set; } = "";
         }
+
         [HttpPut("{id}/trang-thai")]
         public async Task<IActionResult> CapNhatTrangThai(int id, [FromBody] CapNhatTrangThaiRequest request)
         {
@@ -62,6 +75,11 @@ namespace StridexApi.Controllers
                 trangThai = donHang.TrangThai
             });
         }
+
+        // ==============================
+        // LẤY TẤT CẢ ĐƠN HÀNG CHO ADMIN
+        // API: GET /api/donhang
+        // ==============================
         [HttpGet]
         public async Task<IActionResult> LayTatCaDonHang()
         {
@@ -87,6 +105,10 @@ namespace StridexApi.Controllers
             return Ok(danhSach);
         }
 
+        // ==============================
+        // TẠO ĐƠN HÀNG + GỬI EMAIL
+        // API: POST /api/donhang
+        // ==============================
         [HttpPost]
         public async Task<IActionResult> TaoDonHang([FromBody] TaoDonHangRequest request)
         {
@@ -103,6 +125,16 @@ namespace StridexApi.Controllers
                 return BadRequest(new
                 {
                     thongBao = "Giỏ hàng đang trống."
+                });
+            }
+
+            var nguoiDung = await _context.NguoiDungs.FindAsync(request.NguoiDungId);
+
+            if (nguoiDung == null)
+            {
+                return BadRequest(new
+                {
+                    thongBao = "Không tìm thấy người dùng."
                 });
             }
 
@@ -133,6 +165,36 @@ namespace StridexApi.Controllers
 
             await _context.SaveChangesAsync();
 
+            // Gửi email thông báo đặt hàng thành công
+            try
+            {
+                string noiDungEmail = $@"
+                    <h2>Xin chào {nguoiDung.HoTen}</h2>
+
+                    <p>Bạn đã đặt hàng thành công tại <b>STRIDEX SPORT</b>.</p>
+
+                    <p><b>Mã đơn hàng:</b> {donHang.MaDonHang}</p>
+                    <p><b>Ngày đặt:</b> {donHang.NgayDat:dd/MM/yyyy HH:mm}</p>
+                    <p><b>Tổng tiền:</b> {donHang.TongTien:N0} đ</p>
+                    <p><b>Trạng thái:</b> {donHang.TrangThai}</p>
+
+                    <hr>
+
+                    <p>Cảm ơn bạn đã mua hàng tại STRIDEX SPORT!</p>
+                ";
+
+                await _emailService.GuiEmailAsync(
+                    nguoiDung.Email,
+                    "STRIDEX - Đặt hàng thành công",
+                    noiDungEmail
+                );
+            }
+            catch
+            {
+                // Nếu gửi email lỗi thì vẫn cho đặt hàng thành công
+                // Không return lỗi ở đây để tránh làm hỏng chức năng đặt hàng
+            }
+
             return Ok(new
             {
                 thongBao = "Đặt hàng thành công.",
@@ -141,6 +203,10 @@ namespace StridexApi.Controllers
             });
         }
 
+        // ==============================
+        // DOANH THU THEO THÁNG
+        // API: GET /api/donhang/doanh-thu-thang
+        // ==============================
         [HttpGet("doanh-thu-thang")]
         public async Task<IActionResult> LayDoanhThuTheoThang()
         {
@@ -174,6 +240,9 @@ namespace StridexApi.Controllers
         }
     }
 
+    // ==============================
+    // REQUEST MODEL TẠO ĐƠN HÀNG
+    // ==============================
     public class TaoDonHangRequest
     {
         public int NguoiDungId { get; set; }
