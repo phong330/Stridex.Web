@@ -112,17 +112,12 @@ export class DangnhapComponent implements AfterViewInit {
     }, 300);
   }
 
-  xuLyDangNhapThanhCong(nguoiDung: any) {
-    this.auth.luuDangNhap(nguoiDung);
+xuLyDangNhapThanhCong(nguoiDung: any) {
+  this.auth.luuDangNhap(nguoiDung);
 
-    const vaiTro = String(nguoiDung.vaiTro).toLowerCase();
-
-    if (vaiTro === 'admin') {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/']);
-    }
-  }
+  // Admin và User đều về trang chủ
+  this.router.navigate(['/']);
+}
 
   moDangKy(event: Event) {
     event.preventDefault();

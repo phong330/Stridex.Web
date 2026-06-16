@@ -127,9 +127,10 @@
 
 /* Nhóm icon bên phải */
 #nhom-bieu-tuong {
+    display: flex;
     align-items: center;
+    gap: 12px;
 }
-
 /* Icon tròn đổi thành kiểu viền trắng / nền tối */
 .nut-tron {
     background: transparent;

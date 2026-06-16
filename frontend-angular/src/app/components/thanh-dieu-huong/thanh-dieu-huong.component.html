@@ -37,12 +37,21 @@
           <ng-container *ngIf="nguoiDungDangNhap; else chuaDangNhap">
 
             <p class="dong-xin-chao">
-              Xin chào, {{nguoiDungDangNhap.hoTen}}
+              Xin chào, {{ nguoiDungDangNhap.hoTen }}
             </p>
 
+            <a *ngIf="auth.laAdmin()" routerLink="/admin" class="link-dang-nhap-header" (click)="dongMenuTaiKhoan()">
+
+              <i class="fa-solid fa-user-shield"></i>
+              Quản trị
+
+            </a>
+
             <button type="button" class="nut-dang-xuat-header" (click)="dangXuat()">
+
               <i class="fa-solid fa-right-from-bracket"></i>
               Đăng xuất
+
             </button>
 
           </ng-container>
