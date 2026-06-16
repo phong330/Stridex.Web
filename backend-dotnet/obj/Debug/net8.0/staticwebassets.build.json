@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "fo4CdgwEaMBYi2RGiQDtDX6oqzfXZ2b+9x0PMlLo70w=",
-  "Source": "StridexApi",
-  "BasePath": "_content/StridexApi",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"qrytaWD4/MU/a5qk1NjR+HXQT06YKkxpUFXCAoVybQ8=","Source":"StridexApi","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

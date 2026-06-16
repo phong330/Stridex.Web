@@ -6,7 +6,6 @@ import { ThanhToanService } from '../../services/thanhtoan.service';
 import { GiohangService } from '../../services/giohang.service';
 import { AuthService } from '../../services/auth.service';
 import { DonhangService } from '../../services/donhang.service';
-import { SanPham } from '../../models/sanpham';
 
 @Component({
   selector: 'app-giohang',
@@ -69,19 +68,58 @@ export class GiohangComponent {
       },
       error: () => alert('Đặt hàng thất bại!')
     });
-  }
-  thanhToanVnPay() {
-    const maDonHang = 'DH' + new Date().getTime();
-    const soTien = this.tongTien;
 
-    this.thanhToanService.taoThanhToanVnPay(maDonHang, soTien).subscribe({
-      next: (res) => {
-        window.location.href = res.paymentUrl;
+  }
+
+  thanhToanVnPay() {
+    const nguoiDung = this.auth.layNguoiDungDangNhap();
+
+    if (!nguoiDung) {
+      alert('Vui lòng đăng nhập!');
+      return;
+    }
+
+    const chiTiet = this.dsGioHang.map(sp => ({
+      sanPhamId: sp.id,
+      soLuong: sp.soLuong,
+      donGia: sp.gia
+    }));
+
+    this.donhangService.taoDonHang({
+      nguoiDungId: nguoiDung.id,
+      chiTiet
+    }).subscribe({
+
+      next: (donHang: any) => {
+
+        const maDonHang = donHang.maDonHang;
+        const soTien = this.tongTien;
+
+        // Xóa giỏ hàng ngay sau khi tạo đơn
+        this.giohang.xoaTatCa();
+
+        this.thanhToanService
+          .taoThanhToanVnPay(maDonHang, soTien)
+          .subscribe({
+
+            next: (res: any) => {
+              window.location.href = res.paymentUrl;
+            },
+
+            error: (err) => {
+              console.error(err);
+              alert('Không tạo được thanh toán VNPay');
+            }
+
+          });
+
       },
-      error: (err) => {
-        console.error('Lỗi tạo thanh toán VNPay:', err);
-        alert('Không tạo được thanh toán VNPay');
+
+      error: () => {
+        alert('Không tạo được đơn hàng');
       }
+
     });
+
   }
 }

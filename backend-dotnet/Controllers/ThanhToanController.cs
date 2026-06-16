@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using StridexApi.Data;
 
 namespace StridexApi.Controllers
 {
@@ -10,10 +11,14 @@ namespace StridexApi.Controllers
     public class ThanhToanController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly AppDbContext _context;
 
-        public ThanhToanController(IConfiguration configuration)
+        public ThanhToanController(
+            IConfiguration configuration,
+            AppDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost("tao-thanh-toan-vnpay")]
@@ -31,29 +36,30 @@ namespace StridexApi.Controllers
             long amount = dto.SoTien * 100;
 
             var vnpParams = new SortedList<string, string>
-            {
-                { "vnp_Version", "2.1.0" },
-                { "vnp_Command", "pay" },
-                { "vnp_TmnCode", tmnCode },
-                { "vnp_Amount", amount.ToString() },
-                { "vnp_CreateDate", createDate },
-                { "vnp_CurrCode", "VND" },
-                { "vnp_IpAddr", GetIpAddress() },
-                { "vnp_Locale", "vn" },
-                { "vnp_OrderInfo", orderInfo },
-                { "vnp_OrderType", "other" },
-                { "vnp_ReturnUrl", returnUrl },
-                { "vnp_TxnRef", txnRef }
-            };
+        {
+            { "vnp_Version", "2.1.0" },
+            { "vnp_Command", "pay" },
+            { "vnp_TmnCode", tmnCode },
+            { "vnp_Amount", amount.ToString() },
+            { "vnp_CreateDate", createDate },
+            { "vnp_CurrCode", "VND" },
+            { "vnp_IpAddr", GetIpAddress() },
+            { "vnp_Locale", "vn" },
+            { "vnp_OrderInfo", orderInfo },
+            { "vnp_OrderType", "other" },
+            { "vnp_ReturnUrl", returnUrl },
+            { "vnp_TxnRef", txnRef }
+        };
 
             string queryString = BuildQueryString(vnpParams);
             string secureHash = HmacSHA512(hashSecret, queryString);
 
-            string paymentUrl = vnpUrl + "?" + queryString + "&vnp_SecureHash=" + secureHash;
+            string paymentUrl =
+                vnpUrl + "?" + queryString + "&vnp_SecureHash=" + secureHash;
 
             return Ok(new
             {
-                paymentUrl = paymentUrl
+                paymentUrl
             });
         }
 
@@ -81,23 +87,39 @@ namespace StridexApi.Controllers
             string rawData = BuildQueryString(vnpParams);
             string checkHash = HmacSHA512(hashSecret, rawData);
 
-            if (!checkHash.Equals(vnpSecureHash, StringComparison.InvariantCultureIgnoreCase))
+            if (!checkHash.Equals(
+                vnpSecureHash,
+                StringComparison.InvariantCultureIgnoreCase))
             {
                 return Redirect("http://localhost:4200/thanh-toan-that-bai");
             }
 
-            string responseCode = query["vnp_ResponseCode"].ToString();
-            string transactionStatus = query["vnp_TransactionStatus"].ToString();
-            string maDonHang = query["vnp_TxnRef"].ToString();
+            string responseCode =
+                query["vnp_ResponseCode"].ToString();
+
+            string transactionStatus =
+                query["vnp_TransactionStatus"].ToString();
+
+            string maDonHang =
+                query["vnp_TxnRef"].ToString();
 
             if (responseCode == "00" && transactionStatus == "00")
             {
-                // Tạm thời redirect thành công.
-                // Sau này sẽ thêm code cập nhật đơn hàng trong SQL.
-                return Redirect($"http://localhost:4200/thanh-toan-thanh-cong?maDonHang={maDonHang}");
+                var donHang = _context.DonHangs
+                    .FirstOrDefault(x => x.MaDonHang == maDonHang);
+
+                if (donHang != null)
+                {
+                    donHang.TrangThai = "Đã thanh toán - Chờ duyệt";
+                    _context.SaveChanges();
+                }
+
+                return Redirect(
+                    $"http://localhost:4200/thanh-toan-thanh-cong?maDonHang={maDonHang}");
             }
 
-            return Redirect($"http://localhost:4200/thanh-toan-that-bai?maDonHang={maDonHang}");
+            return Redirect(
+                $"http://localhost:4200/thanh-toan-that-bai?maDonHang={maDonHang}");
         }
 
         private string BuildQueryString(SortedList<string, string> data)
@@ -125,14 +147,19 @@ namespace StridexApi.Controllers
             byte[] inputBytes = Encoding.UTF8.GetBytes(inputData);
 
             using HMACSHA512 hmac = new HMACSHA512(keyBytes);
+
             byte[] hashBytes = hmac.ComputeHash(inputBytes);
 
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            return BitConverter.ToString(hashBytes)
+                .Replace("-", "")
+                .ToLower();
         }
 
         private string GetIpAddress()
         {
-            string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1";
+            string ipAddress =
+                HttpContext.Connection.RemoteIpAddress?.ToString()
+                ?? "127.0.0.1";
 
             if (ipAddress == "::1")
             {
@@ -146,6 +173,8 @@ namespace StridexApi.Controllers
     public class TaoThanhToanDto
     {
         public string MaDonHang { get; set; } = "";
+
         public long SoTien { get; set; }
     }
+
 }

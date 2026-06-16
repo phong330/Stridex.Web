@@ -30,8 +30,8 @@ namespace StridexApi.Controllers
             conn.Open();
 
             string checkSql = @"SELECT COUNT(*) 
-                                FROM TaiKhoan 
-                                WHERE LOWER(LTRIM(RTRIM(Email))) = @Email";
+                            FROM NguoiDung
+                            WHERE LOWER(LTRIM(RTRIM(Email))) = @Email";
 
             using SqlCommand checkCmd = new SqlCommand(checkSql, conn);
             checkCmd.Parameters.AddWithValue("@Email", email);
@@ -43,8 +43,8 @@ namespace StridexApi.Controllers
                 return BadRequest(new { message = "Email đã tồn tại!" });
             }
 
-            string sql = @"INSERT INTO TaiKhoan (HoTen, Email, MatKhau, VaiTro)
-                           VALUES (@HoTen, @Email, @MatKhau, N'user')";
+            string sql = @"INSERT INTO NguoiDung (HoTen, Email, MatKhau, VaiTro)
+                       VALUES (@HoTen, @Email, @MatKhau, N'user')";
 
             using SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@HoTen", hoTen);
@@ -67,10 +67,10 @@ namespace StridexApi.Controllers
             using SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
 
-            string sql = @"SELECT Id, HoTen, Email, VaiTro 
-                           FROM TaiKhoan 
-                           WHERE LOWER(LTRIM(RTRIM(Email))) = @Email 
-                           AND LTRIM(RTRIM(MatKhau)) = @MatKhau";
+            string sql = @"SELECT Id, HoTen, Email, VaiTro
+                       FROM NguoiDung
+                       WHERE LOWER(LTRIM(RTRIM(Email))) = @Email
+                       AND LTRIM(RTRIM(MatKhau)) = @MatKhau";
 
             using SqlCommand cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("@Email", email);
@@ -109,9 +109,9 @@ namespace StridexApi.Controllers
                 var settings = new GoogleJsonWebSignature.ValidationSettings()
                 {
                     Audience = new List<string>
-                    {
-                        GoogleClientId
-                    }
+                {
+                    GoogleClientId
+                }
                 };
 
                 var payload = await GoogleJsonWebSignature.ValidateAsync(dto.IdToken, settings);
@@ -124,9 +124,9 @@ namespace StridexApi.Controllers
                 using SqlConnection conn = new SqlConnection(connectionString);
                 conn.Open();
 
-                string findSql = @"SELECT Id, HoTen, Email, VaiTro 
-                                   FROM TaiKhoan 
-                                   WHERE LOWER(LTRIM(RTRIM(Email))) = @Email";
+                string findSql = @"SELECT Id, HoTen, Email, VaiTro
+                               FROM NguoiDung
+                               WHERE LOWER(LTRIM(RTRIM(Email))) = @Email";
 
                 using SqlCommand findCmd = new SqlCommand(findSql, conn);
                 findCmd.Parameters.AddWithValue("@Email", email);
@@ -150,9 +150,9 @@ namespace StridexApi.Controllers
 
                 reader.Close();
 
-                string insertSql = @"INSERT INTO TaiKhoan (HoTen, Email, MatKhau, VaiTro)
-                                     OUTPUT INSERTED.Id
-                                     VALUES (@HoTen, @Email, @MatKhau, N'user')";
+                string insertSql = @"INSERT INTO NguoiDung (HoTen, Email, MatKhau, VaiTro)
+                                 OUTPUT INSERTED.Id
+                                 VALUES (@HoTen, @Email, @MatKhau, N'user')";
 
                 using SqlCommand insertCmd = new SqlCommand(insertSql, conn);
                 insertCmd.Parameters.AddWithValue("@HoTen", hoTen);
@@ -182,8 +182,41 @@ namespace StridexApi.Controllers
                 });
             }
         }
-    }
 
+        [HttpGet]
+        public IActionResult LayTatCaNguoiDung()
+        {
+            string connectionString =
+            _configuration.GetConnectionString("DefaultConnection")!;
+
+            List<object> dsNguoiDung = new();
+
+            using SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+
+            string sql = @"SELECT Id, HoTen, Email, VaiTro
+               FROM NguoiDung
+               ORDER BY Id";
+
+            using SqlCommand cmd = new SqlCommand(sql, conn);
+            using SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                dsNguoiDung.Add(new
+                {
+                    id = Convert.ToInt32(reader["Id"]),
+                    hoTen = reader["HoTen"].ToString(),
+                    email = reader["Email"].ToString(),
+                    vaiTro = reader["VaiTro"].ToString()
+                });
+            }
+
+            return Ok(dsNguoiDung);
+
+        }
+
+    }
     public class TaiKhoanDto
     {
         public string HoTen { get; set; } = "";
